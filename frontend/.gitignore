@@ -1,0 +1,20 @@
+node_modules/
+.cache/
+
+# Build output
+build/
+dist/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Debugging files
+*.swp
+
