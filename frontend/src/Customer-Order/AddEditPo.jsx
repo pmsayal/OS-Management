@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 
-const AddEditPo = ({ refreshData, onAddItem, currentCpoId }) => {
+const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => {
   const [items, setItems] = useState([]);
   const [item, setItem] = useState("");
   const [qty, setQty] = useState("");
@@ -75,11 +75,12 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId }) => {
   }, [currentCpoId]);
 
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
-      console.log("Submitting item for CPO ID:", currentCpoId);
-      
       const formData = new FormData();
       formData.append("item", item);
       formData.append("qty", qty);
@@ -87,66 +88,44 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId }) => {
       formData.append("tax", tax);
       formData.append("salesPrice", salesPrice);
       formData.append("customerPo", currentCpoId);
-      formData.append("allocatedQty", allocatedQty);
-      formData.append("availableQty", availableQty);
-      formData.append("remainingQty", remainingQty);
-
-      console.log("Sending FormData:", {
-        item,
-        qty,
-        cost,
-        tax,
-        salesPrice,
-        currentCpoId,
-      });
-      const { data } = await axios.post(
+  
+      const response = await axios.post(
         "http://localhost:8000/api/itempo",
         formData,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
+  
 
-      console.log("Added Item Data:", data);
-
-      if (data?.error) {
-        toast.error(data.error);
-      } else {
-        toast.success("Item created successfully");
+      if (response.status === 201 && response.data) {
+        toast.success(response.data.message || "Item added successfully!");
         refreshData();
-        onAddItem(data);
-        // Reset fields
-        setItem("");
-        setQty("");
-        setCost("");
-        setTax("");
-        setSalesPrice("");
+        onAddItem(response.data);
+        closeAddForm();
+      } else {
+
+        toast.error(response.data.error || "Unexpected error occurred.");
       }
     } catch (err) {
-      console.error(
-        "Error adding item:",
-        err.response ? err.response.data : err
-      );
-      toast.error(
-        "Error adding item: " +
-          (err.response ? err.response.data.error : err.message)
-      );
+      console.error("Error:", err.message);
+      toast.error("ERROR: Failed to add item due to server error.");
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="salesorder-form">
       <h3 className="form-heading">Add SalesItem</h3>
       <div className="customer-form">
         <label htmlFor="item" className="customer-form__label">
-          Item:
+          <span>Item: <span className="required-field">*</span></span>
           <select
             id="item"
             value={item}
             onChange={handleItemChange}
             className="customer-form__input"
+            required
           >
             <option value="">Select an item</option>
             {items.map((item) => (
@@ -169,13 +148,14 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId }) => {
         />
 
         <label htmlFor="avlqty" className="customer-form__label">
-          Allocated Qty:
+          <span>Allocated Qty: <span className="required-field">*</span></span>
           <input
             type="number"
             id="avlqty"
             value={qty}
             onChange={(e) => setQty(e.target.value)}
             className="customer-form__input"
+            required
           />
         </label>
 
@@ -191,18 +171,19 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId }) => {
         />
 
         <label htmlFor="cost" className="customer-form__label">
-          Unit Cost:
+         <span>Unit Cost: <span className="required-field">*</span></span>
           <input
             type="text"
             id="cost"
             value={cost}
             onChange={(event) => setCost(event.target.value)}
             className="customer-form__input"
+            required
           />
         </label>
 
         <label htmlFor="tax" className="customer-form__label">
-          Tax :
+          <span>Tax: <span className="required-field">*</span></span>
           <input
             type="text"
             id="tax"
@@ -211,6 +192,7 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId }) => {
             className="customer-form__input"
             min="0"
             max="100"
+            required
           />
         </label>
         <label htmlFor="salesprice" className="customer-form__label">

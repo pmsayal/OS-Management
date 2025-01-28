@@ -41,6 +41,7 @@
   border: 1px solid lightgray;
   border-radius: 5px;
   height: 40px;
+  font-size: 18px;
 }
 
 .customer-salesorder_input22 {
@@ -132,7 +133,11 @@ input, select {
 
 
 .lblCPO {
-  font-size: 20px;
+  font-size: 22px;
+}
+
+.icon-size {
+  font-size: 24px; 
 }
 
 

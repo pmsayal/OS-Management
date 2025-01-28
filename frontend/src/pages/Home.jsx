@@ -126,7 +126,7 @@ function Home() {
                 </div>
 
                 <button className="button" type="submit">
-                  Sign-in
+                  Login
                 </button>
               </form>
             </div>

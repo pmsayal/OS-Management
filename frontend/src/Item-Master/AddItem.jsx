@@ -111,7 +111,7 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
         <h3 className="form-heading">Add Item</h3>
         <div className="customer-form">
           <label htmlFor="name" className="customer-form__label">
-            Item Name:
+            <span>Item Name: <span className="required-field">*</span></span>
           </label>
           <input
             type="text"
@@ -119,16 +119,18 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
             value={formData.item}
             onChange={handleInputChange}
             className="customer-form__input"
+            required
           />
 
           <label htmlFor="supplier" className="customer-form__label">
-            Supplier:
+            <span>Supplier: <span className="required-field">*</span></span>
           </label>
           <select
             name="supplier"
             value={formData.supplier} 
             onChange={handleInputChange}
             className="customer-form__input"
+            required
           >
             <option value="">Select Supplier</option>
             {suppliers.map((supplier) => (
@@ -139,7 +141,7 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
           </select>
 
           <label htmlFor="category" className="customer-form__label">
-            Category:
+            <span>Category: <span className="required-field">*</span></span>
           </label>
           <input
             type="text"
@@ -147,9 +149,10 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
             value={formData.category}
             onChange={handleInputChange}
             className="customer-form__input"
+            required
           />
-          <label htmlFor="brand" className="customer-form__label">
-            Brand:
+          <label htmlFor="brand" className="customer-form__label">            
+            <span>Brand: <span className="required-field">*</span></span>
           </label>
           <input
             type="text"
@@ -157,8 +160,8 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
             value={formData.brand}
             onChange={handleInputChange}
             className="customer-form__input"
+            required
           />
-
 
           <label htmlFor="description" className="customer-form__label">
             Description:
@@ -171,20 +174,21 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
           />
 
           <label htmlFor="unit" className="customer-form__label">
-            Unit:
+            <span> Unit: <span className="required-field">*</span></span>           
           </label>
           <select
             name="unit"
             value={formData.unit}
             onChange={handleInputChange}
             className="customer-form__input"
+            required
           >
             <option value="KG">KG</option>
             <option value="PCS">PCS</option>
           </select>
 
-          <label htmlFor="status" className="customer-form__label">
-            Status:
+          <label htmlFor="status" className="customer-form__label">            
+            <span>Status: <span className="required-field">*</span></span>
           </label>
           <input
             type="checkbox"
@@ -197,6 +201,7 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
               })
             }
             className="customer-form__input"
+            required
           />
         </div>
 

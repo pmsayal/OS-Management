@@ -147,7 +147,7 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
       <h3 className="salesorder-form-heading">Add / Edit Item</h3>
       <div className="customer-form">
         <label htmlFor="item" className="customer-form__label">
-          Item Name:
+           <span>Item Name:: <span className="required-field">*</span></span>
         </label>
         <select
           id="item"
@@ -174,8 +174,8 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           readOnly
         />
 
-        <label htmlFor="qty" className="customer-form__label">
-          Allocated Qty:
+        <label htmlFor="qty" className="customer-form__label">          
+          <span>Allocated Qty: <span className="required-field">*</span></span>
         </label>
         <input
           type="number"
@@ -196,8 +196,8 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           readOnly
         />
 
-        <label htmlFor="unitCost" className="customer-form__label">
-          Unit Cost:
+        <label htmlFor="unitCost" className="customer-form__label">          
+          <span>Unit Cost: <span className="required-field">*</span></span>
         </label>
         <input
           type="text"
@@ -205,10 +205,11 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           value={unitCost}
           onChange={(e) => setUnitCost(e.target.value)}
           className="customer-form__input"
+          required
         />
 
-        <label htmlFor="purchasePrice" className="customer-form__label">
-          Purchase Price:
+        <label htmlFor="purchasePrice" className="customer-form__label">          
+          <span>Purchase Price:<span className="required-field">*</span></span>
         </label>
         <input
           type="text"
@@ -216,10 +217,11 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           value={purchasePrice}
           onChange={(e) => setPurchasePrice(e.target.value)}
           className="customer-form__input"
+          required
         />
 
-        <label htmlFor="invoiceNo" className="customer-form__label">
-          Invoice No.:
+        <label htmlFor="invoiceNo" className="customer-form__label">          
+          <span>Invoice No.: <span className="required-field">*</span></span>
         </label>
         <input
           type="text"
@@ -227,10 +229,11 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           value={invoiceNo}
           onChange={(e) => setInvoiceNo(e.target.value)}
           className="customer-form__input"
+          required
         />
 
         <label htmlFor="invoiceDate" className="customer-form__label">
-          Invoice Date:
+          <span>Invoice Date: <span className="required-field">*</span></span>
         </label>
         <input
           type="date"
@@ -238,6 +241,7 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           value={invoiceDate}
           onChange={(e) => setInvoiceDate(e.target.value)}
           className="customer-form__input"
+          required
         />
       </div>
       <div className="ButtonContainer1">

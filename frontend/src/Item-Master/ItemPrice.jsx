@@ -221,7 +221,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
             Item Prices for {selectedItem.item}:
           </h2>
           <table className="table table-bordered table-striped table-hover shadow">
-            <thead className="table-secondary">
+            <thead className="table-secondary TH-SIZE">
               <tr>
                 <th onClick={() => sortItems("price")}>
                   Price{" "}
@@ -248,7 +248,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
             </thead>
             <tbody>
               {itemprice?.map((price) => (
-                <tr key={price._id}>
+                <tr key={price._id} className="TD-SIZE">
                   <td>{price.price}</td>
                   <td>{price.qty}</td>
                   <td>{new Date(price.date).toLocaleDateString()}</td>
@@ -258,13 +258,13 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
                         className="btns1"
                         onClick={() => handleEdit(price)}
                       >
-                        <BiSolidEdit />
+                        <BiSolidEdit className="icon-size"/>
                       </button>
                       <button
                         className="btns2"
                         onClick={() => handleDelete(price._id)}
                       >
-                        <MdDelete />
+                        <MdDelete className="icon-size"/>
                       </button>
                     </div>
                   </td>

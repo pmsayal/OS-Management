@@ -123,44 +123,7 @@ export const removeCustomerPo = async (req, res) => {
   }
 };
 
-// export const updateCustomerPo = async (req, res) => {
-//   try {
-//     const { customern, customerpo, date, status, cpoTotal  } = req.fields;
 
-//     if (!customern || !customern.trim())
-//       return res.status(400).json({ error: "Customer is required" });
-//     if (!customerpo || !customerpo.trim())
-//       return res.status(400).json({ error: "CustomerPO is required" });
-//     if (!status || !status.trim())
-//       return res.status(400).json({ error: "Status is required" });
-//     if (!date || !date.trim())
-//       return res.status(400).json({ error: "Date is required" });
-
-//     const customer = await Customer.findById(customern);
-//     if (!customer) return res.status(404).json({ error: "Customer not found" });
-
-//     const updatedCPO = await CustomerPO.findByIdAndUpdate(
-//       req.params.id,
-//       {
-//         customern: customer._id,
-//         customerpo,
-//         date,
-//         status,
-//         cpoTotal,
-//       },
-//       { new: true }
-//     );
-
-//     if (!updatedCPO) {
-//       return res.status(404).json({ error: "Item not found" });
-//     }
-
-//     res.json(updatedCPO);
-//   } catch (err) {
-//     console.log("Error updating CustomerPO:", err);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
 
 export const updateCustomerPo = async (req, res) => {
   try {

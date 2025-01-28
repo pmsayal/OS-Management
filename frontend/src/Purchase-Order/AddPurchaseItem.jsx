@@ -146,10 +146,10 @@ function AddPurchaseItem(
                   <Td>{new Date(item.invoiceDate).toLocaleDateString()}</Td>
                   <Td>
                     <button onClick={() => handleEditPurchaseItem(item)}>
-                      <BiEdit />
+                      <BiEdit className="icon-size"/>
                     </button>
                     <button onClick={() => handlePODelete(item._id)}>
-                      <BiTrash />
+                      <BiTrash className="icon-size"/>
                     </button>
                   </Td>
                 </Tr>

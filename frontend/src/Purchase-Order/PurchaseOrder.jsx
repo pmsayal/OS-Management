@@ -197,7 +197,7 @@ const handleSubmit = async (event) => {
             <div className="ButtonContainer">
               <div className="labelinputfield">
                 <label htmlFor="customer" className="lblCPO">
-                  Customer:
+                  Customer:<span className="required-field">*</span>
                 </label>
                 <select
                   id="customer"
@@ -220,7 +220,7 @@ const handleSubmit = async (event) => {
               </div>
               <div className="labelinputfield">
                 <label htmlFor="date" className="lblCPO">
-                  Date:
+                  Date:<span className="required-field">*</span>
                 </label>
                 <input
                   type="date"
@@ -234,7 +234,7 @@ const handleSubmit = async (event) => {
             <div className="ButtonContainer">
               <div className="labelinputfield">
                 <label htmlFor="customerpo" className="lblCPO">
-                  CPO:
+                  CPO:<span className="required-field">*</span>
                 </label>
 
                 <select
@@ -255,7 +255,7 @@ const handleSubmit = async (event) => {
               </div>
               <div className="labelinputfield">
                 <label htmlFor="status" className="invoice-salesorder_label">
-                  Status:
+                  Status:<span className="required-field">*</span>
                 </label>
                 <select
                   id="status"
@@ -272,7 +272,7 @@ const handleSubmit = async (event) => {
             <div className="ButtonContainer">
               <div className="labelinputfield">
                 <label htmlFor="purchase" className="invoice-salesorder_label">
-                  Purchase No. :
+                  Purchase No. :<span className="required-field">*</span>
                 </label>
                 <input
                   type="text"

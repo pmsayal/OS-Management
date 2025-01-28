@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import "./salesorder.css";
 import AddEditPo from "./AddEditPo";
@@ -5,45 +6,15 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 import "../StyleCSS/SalesPurchase.css";
-import styled from "styled-components";
-import { BiEdit, BiTrash } from "react-icons/bi";
-import { Tooltip } from "antd";
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
-
-const Th = styled.th`
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-`;
-
-const Td = styled.td`
-  border: 1px solid #ddd;
-  padding: 8px;
-`;
-
-const Tr = styled.tr`
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-`;
-
-const HeadTr = styled(Tr)`
-  background-color: #e2e3e7;
-  color: black;
-`;
+import SalesItem from "../Customer-Order/SalesItemsTable"; 
 
 const SalesOrder = ({
   editingCpo,
   refreshData,
   setVisible,
-  currentCpoIdProp,
   refreshCustomers,
   loadSalesItemsForCPO,
-  onSave,
+  onTotalPriceChange 
 }) => {
   const [customern, setCustomer] = useState("");
   const [customerpo, setCustomerpo] = useState("");
@@ -51,14 +22,10 @@ const SalesOrder = ({
   const [status, setStatus] = useState("");
   const [addClick, setAddClick] = useState(false);
   const [customers, setCustomers] = useState([]);
-  const [edits, setEditing] = useState(null);
-  const [salesItems, setSalesItems] = useState([]);
-
-  const [totalCustomerPOLocal, setTotalCustomerPOLocal] = useState(0);
-
   const [currentCpoId, setCurrentCpoId] = useState(
     editingCpo ? editingCpo._id : ""
   );
+  // const [totalSalesPrice, setTotalSalesPrice] = useState(0);
 
   useEffect(() => {
     if (editingCpo && editingCpo._id) {
@@ -70,13 +37,12 @@ const SalesOrder = ({
           : ""
       );
       setStatus(editingCpo.status || "");
-      loadSalesItemsForCPO(editingCpo._id);
+      setCurrentCpoId(editingCpo._id);
     } else {
       setCustomer("");
       setCustomerpo("");
       setDate("");
       setStatus("");
-      setSalesItems([]);
     }
   }, [editingCpo]);
 
@@ -94,33 +60,8 @@ const SalesOrder = ({
     }
   };
 
-  const loadSalesItems = async (cpoId) => {
-    if (!cpoId) {
-      console.error("CPO ID is undefined");
-      return;
-    }
-    try {
-      console.log("CPOID", cpoId);
-      const { data } = await axios.get(
-        `http://localhost:8000/api/itempos?customerPo=${cpoId}`
-      );
-      setSalesItems(data);
-      calculateTotalPrice(data);
-    } catch (err) {
-      console.error("Error loading sales items for CPO:", err);
-      toast.error("Failed to load Customer PO sales items");
-    }
-  };
-
-  useEffect(() => {
-    if (editingCpo && editingCpo._id) {
-      loadSalesItems(editingCpo._id);
-    }
-  }, [editingCpo]);
-
   useEffect(() => {
     loadCustomer();
-    loadSalesItems();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -131,14 +72,6 @@ const SalesOrder = ({
       formData.append("customerpo", customerpo);
       formData.append("date", date);
       formData.append("status", status);
-
-      salesItems.forEach((item) => {
-        if (item && item.item) {
-          formData.append("salesItems", item.item._id);
-        } else {
-          console.error("Invalid item in salesItems:", item);
-        }
-      });
 
       let response;
       if (editingCpo && editingCpo._id) {
@@ -169,9 +102,9 @@ const SalesOrder = ({
       setVisible(false);
     } catch (err) {
       if (err.response) {
-        console.error("Error saving customer PO:", err.response.data);
+        console.error("Error update customer PO:", err.response.data);
         toast.error(
-          `Failed to save customer PO: ${
+          `Failed to update customer PO: ${
             err.response.data.error || "Unknown error"
           }`
         );
@@ -182,117 +115,39 @@ const SalesOrder = ({
     }
   };
 
-  const handleAdd = () => {
-    setAddClick(true);
-    setEditing(null);
-  };
-
-  // const handleAddItem = async (item) => {
-  //   const newItem = { ...item, customerPo: currentCpoId };
-  //   setSalesItems((prevItems) => [...prevItems, newItem]);
-
-
-  //   setAddClick(false);
-  // };
-
-  const handleAddItem = async (item) => {
-    const newItem = { ...item, customerPo: currentCpoId };
-    setSalesItems((prevItems) => [...prevItems, newItem]);
-  
-    const newTotal = totalCustomerPOLocal + item.salesPrice; 
-    setTotalCustomerPOLocal(newTotal); 
-  
-
-    try {
-      await axios.put(`http://localhost:8000/api/customerpos/${currentCpoId}`, {
-        cpoTotal: newTotal,
-      });
-    } catch (error) {
-      console.error("Error updating CPO total:", error);
-      toast.error("Failed to update CPO total");
-    }
-  
+  const closeAddForm = () => {
     setAddClick(false);
   };
 
-  const handleEditItem = async (item) => {
-    setEditing(item);
-    setVisible(true);
-    setCurrentCpoId(item._id);
-    console.log("Editing CPO ID: ", item._id);
-    setSalesItems([]);
-    await loadSalesItemsForCPO(item._id);
-  };
 
-  useEffect(() => {
-    if (editingCpo && editingCpo._id) {
-      loadSalesItemsForCPO(editingCpo._id);
-    }
-  }, [editingCpo]);
-
-  const handleDeleteItem = async (Id) => {
-    try {
-      const { data } = await axios.delete(
-        `http://localhost:8000/api/itempos/${Id}`
-      );
-      console.log(data);
-      if (data?.error) {
-        toast.error(data.error);
-      } else {
-        toast.success(`${data.message}`);
-        loadSalesItems();
-      }
-    } catch (err) {
-      console.error("Error deleting item:", err);
-      toast.error("Failed to delete item");
-    }
-  };
+  // const handleTotalPriceChange = (total) => {
+  //   onTotalPriceChange(total); // Pass the total price to ManageCPO
+  // };
 
 
-  const calculateTotalPrice = (items) => {
-    const total = items.reduce((sum, item) => {
-      const qty = item.qty || 0;
-      const cost = item.cost || 0;
-      const tax = item.tax || 0;
-
-      const basePrice = qty * cost;
-      const taxAmount = (basePrice * tax) / 100;
-      const finalPrice = basePrice + taxAmount;
-      console.log(
-        `Item: ${item.item.item}, Qty: ${qty}, Unit Cost: ${cost}, Base Price: ${basePrice}, Tax Amount: ${taxAmount}, Final Price: ${finalPrice}`
-      );
-      return sum + finalPrice; 
-    }, 0);
-    setTotalCustomerPOLocal(total); 
-  };
-
-
-  useEffect(() => {
-    calculateTotalPrice(salesItems);
-  }, [salesItems]);
 
   return (
     <>
       {addClick ? (
         <AddEditPo
-          refreshData={loadSalesItems}
-          edits={edits}
-          onAddItem={handleAddItem}
+          refreshData={loadSalesItemsForCPO}
           currentCpoId={currentCpoId}
+          closeAddForm={closeAddForm}
+          
         />
       ) : (
         <>
           <form onSubmit={handleSubmit}>
             <div className="HEDING">
               <h3 className="form-headings">
-                {editingCpo ? "Edit" : "Add"}Customer PO
+                {editingCpo ? "Edit" : "Add"} Customer PO
               </h3>
             </div>
             <div>
               <div className="ButtonContainer">
                 <div className="labelinputfield">
                   <label htmlFor="customern" className="lblCPO">
-                    Customer:
+                    Customer: <span className="required-field">*</span>
                   </label>
                   <select
                     name="customern"
@@ -310,7 +165,7 @@ const SalesOrder = ({
                 </div>
                 <div className="labelinputfield">
                   <label htmlFor="date" className="lblCPO">
-                    Date:
+                    Date:<span className="required-field">*</span>
                   </label>
                   <input
                     type="date"
@@ -324,7 +179,7 @@ const SalesOrder = ({
               <div className="ButtonContainer">
                 <div className="labelinputfield">
                   <label htmlFor="customerpo" className="lblCPO">
-                    Customer PO:
+                    Customer PO:<span className="required-field">*</span>
                   </label>
                   <input
                     type="text"
@@ -336,7 +191,7 @@ const SalesOrder = ({
                 </div>
                 <div className="labelinputfield">
                   <label htmlFor="status" className="lblCPO">
-                    Status:
+                    Status:<span className="required-field">*</span>
                   </label>
                   <select
                     id="status"
@@ -350,83 +205,16 @@ const SalesOrder = ({
                 </div>
               </div>
             </div>
-            <button type="button" onClick={handleAdd} className="StyledBtn">
+            <button type="button" onClick={() => setAddClick(true)} className="StyledBtn">
               Add SalesItem
             </button>
 
-            <Table>
-              <thead>
-                <HeadTr>
-                  <Th>Item</Th>
-                  <Th>Qty</Th>
-                  <Th>Unit Cost</Th>
-                  <Th>Tax</Th>
-                  <Th>Sales Price</Th>
-                  <Th>Action</Th>
-                </HeadTr>
-              </thead>
-              <tbody>
-                {salesItems.length > 0 ? (
-                  salesItems.map((items) => {
-                    if (!items || !items.item) {
-                      return null;
-                    }
-                    return (
-                      <Tr key={items._id}>
-                        <Td>{items.item.item}</Td>
-                        <Td>{items.qty}</Td>
-                        <Td>{items.cost}</Td>
-                        <Td>{items.tax}</Td>
-                        <Td>{items.salesPrice}</Td>
-                        <Td>
-                          <div className="button-group">
-                            <Tooltip title="Edit">
-                              <button
-                                onClick={() => handleEditItem(items)}
-                                className="btns1"
-                              >
-                                <BiEdit />
-                              </button>
-                            </Tooltip>
-                            <Tooltip title="Delete">
-                              <button
-                                onClick={() => handleDeleteItem(items._id)}
-                                className="btns2"
-                              >
-                                <BiTrash />
-                              </button>
-                            </Tooltip>
-                          </div>
-                        </Td>
-                      </Tr>
-                    );
-                  })
-                ) : (
-                  <Tr>
-                    <Td colSpan="6">No items available.</Td>
-                  </Tr>
-                )}
-              </tbody>
-            </Table>
-            {/* <div >
-              <h2>
-                Total :{" "}
-                {salesItems.reduce(
-                  (total, items) => total + Number(items.salesPrice || 0),
-                  0
-                )}
-              </h2>
-            </div> */}
-            <div className="totaldiv">
-              {salesItems.length > 0 ? (
-                <p>
-                  <strong className="totalprice">
-                    Total CustomerPO Price:
-                  </strong>{" "}
-                  ₹{totalCustomerPOLocal.toFixed(2)}
-                </p>
-              ) : null}
-            </div>
+            <SalesItem 
+              currentCpoId={currentCpoId} 
+              loadSalesItemsForCPO={loadSalesItemsForCPO} 
+              // onTotalPriceChange={handleTotalPriceChange}
+            />
+
             <div className="ButtonContainer">
               <button type="submit" className="StyledButton1">
                 Save

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SalesOrder from "./CustomerPo";
+import SalesOrder from "../Customer-Order/CustomerPo";
 import { BiAddToQueue, BiEdit, BiSearch, BiTrash } from "react-icons/bi";
 import { Modal, Tooltip, Pagination } from "antd";
 import axios from "axios";
@@ -22,18 +22,20 @@ function ManageCPO() {
   const [cpoList, setCpoList] = useState([]);
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [selectedCpoId, setSelectedCpoId] = useState()
+  const [selectedCpoId, setSelectedCpoId] = useState();
+  const [totalSalesPrices, setTotalSalesPrices] = useState({});
 
   useEffect(() => {
     loadCpo(currentPage);
-    loadSalesItems();
     loadCpoList();
+    loadSalesItems();
   }, [currentPage]);
 
   const loadCpoList = async () => {
     try {
       const { data } = await axios.get("http://localhost:8000/api/customerpos");
-      const extractedCustomers = data.customers.map((item) => item.customern);
+      const extractedCustomers =
+        data.customers?.map((item) => item.customern) || [];
       setCustomer(extractedCustomers);
     } catch (err) {
       console.log("Error loading customers:", err);
@@ -47,63 +49,32 @@ function ManageCPO() {
       );
       setCustomerpo(data.customers || []);
       setTotalPages(data.totalPages || 1);
-      setCpoList(data.customers.map((item) => item.customerpo));
+      setCpoList(data.customers?.map((item) => item.customerpo) || []);
     } catch (err) {
       console.log(err);
     }
   };
 
-
-
-  const loadSalesItemsForCPO = async (cpoId) => {
-    if (!cpoId) {
-        console.error("CPO ID is undefined");
-        return; 
-    }
+  const loadSalesItems = async () => {
     try {
-        const { data } = await axios.get(`http://localhost:8000/api/itempos?customerPo=${cpoId}`);
-        setSalesItems(data); 
+      const { data } = await axios.get(`http://localhost:8000/api/itempos`);
+      setSalesItems(data || []);
     } catch (err) {
-        console.error("Error loading sales items for CPO:", err);
-        toast.error("Failed to load sales items");
+      console.error("Error loading sales items for CPO:", err);
+      toast.error("Failed to load sales items");
     }
-};
-
-useEffect(() => {
-  if (editingCpo && editingCpo._id) {
-      loadSalesItemsForCPO(editingCpo._id); 
-  }
-}, [editingCpo]);
-
+  };
 
   const handleEditItem = async (item) => {
     setEditingCpo(item);
     setVisible(true);
-    setCurrentCpoId(item._id); 
-    console.log("Editing CPO ID: ", item._id); 
-    await loadSalesItemsForCPO(item._id);
+    setCurrentCpoId(item._id);
+    console.log("Editing CPO ID: ", item._id);
   };
-
-  
 
   const handleCpoSelect = async (cpoId) => {
     setSelectedCpoId(cpoId);
-    await loadSalesItemsForCPO(cpoId); 
-  };
-
-
-  const handleSaveSalesItems = async (newSalesItems) => {
-    try {
-      await axios.post(`http://localhost:8000/api/itempos`, {
-        items: newSalesItems,
-        customerPo: selectedCpoId, 
-      });
-      toast.success("Sales items saved successfully!");
-      await loadSalesItemsForCPO(selectedCpoId); 
-    } catch (err) {
-      console.error("Error saving sales items:", err);
-      toast.error("Failed to save sales items");
-    }
+    // loadSalesItemsForCPO(cpoId);
   };
 
   const handleDelete = async (itemId) => {
@@ -123,21 +94,6 @@ useEffect(() => {
     }
   };
 
-  const loadSalesItems = async () => {
-    try {
-      const { data } = await axios.get("http://localhost:8000/api/itempos");
-      if (Array.isArray(data) && data.length > 0) {
-        setSalesItems(data);
-      } else {
-        setSalesItems([]);
-      }
-    } catch (err) {
-      console.error("Error loading sales items:", err);
-      toast.error("Failed to load sales items");
-    }
-  };
-
-
   const onPageChange = (page) => {
     setCurrentPage(page);
   };
@@ -150,8 +106,6 @@ useEffect(() => {
       console.log(err);
     }
   };
-
-
 
   return (
     <>
@@ -173,7 +127,6 @@ useEffect(() => {
                   label: cust.name,
                 }))}
               />
-
               <label htmlFor="orderDate" className="label">
                 Order Date:
               </label>
@@ -183,13 +136,12 @@ useEffect(() => {
                 value={orderDate}
                 onChange={(e) => setOrderDate(e.target.value)}
               />
-
               <Select
                 className="SearchbelDropdown"
                 placeholder="Customer PO..."
                 onChange={(selectedOption) => {
-                  setCurrentCpoId(selectedOption.value)
-                  handleCpoSelect(selectedOption.value)
+                  setCurrentCpoId(selectedOption.value);
+                  handleCpoSelect(selectedOption.value);
                 }}
                 options={cpoList.map((cpo) => ({
                   value: cpo,
@@ -217,7 +169,7 @@ useEffect(() => {
         <div>
           <h2 className="list-name">Customer PO List:</h2>
           <table className="table table-bordered table-striped">
-            <thead className="table-secondary">
+            <thead className="table-secondary TH-SIZE">
               <tr>
                 <th>Customer Name</th>
                 <th>Customer PO</th>
@@ -227,38 +179,47 @@ useEffect(() => {
                 <th>Action</th>
               </tr>
             </thead>
-
             <tbody>
-              {customerpo.map((item) => (
-                <tr key={item._id}>
-                  <td>{item.customern?.name}</td>
-                  <td>{item.customerpo}</td>
-                  <td>{new Date(item.date).toLocaleDateString()}</td>
-                  <td>{item.cpoTotal}                        </td>
+              {customerpo.map((item) => {
+                const relatedSalesItems = salesItems.filter(
+                  (salesItem) => salesItem.customerPo === item._id
+                );
 
-                  <td>{item.status}</td>
-                  <td>
-                    <div className="button-group">
-                      <Tooltip title="Edit">
-                        <button
-                          onClick={() => handleEditItem(item)}
-                          className="btns1"
-                        >
-                          <BiEdit />
-                        </button>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <button
-                          onClick={() => handleDelete(item._id)}
-                          className="btns2"
-                        >
-                          <BiTrash />
-                        </button>
-                      </Tooltip>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                const totalSalesPrice = relatedSalesItems.reduce(
+                  (total, salesItem) => total + (salesItem.salesPrice || 0),
+                  0
+                );
+
+                return (
+                  <tr key={item._id} className="TD-SIZE">
+                    <td>{item.customern?.name}</td>
+                    <td>{item.customerpo}</td>
+                    <td>{new Date(item.date).toLocaleDateString()}</td>
+                    <td>{totalSalesPrice.toFixed(2)}</td>{" "}
+                    <td>{item.status}</td>
+                    <td>
+                      <div className="button-group">
+                        <Tooltip title="Edit">
+                          <button
+                            onClick={() => handleEditItem(item)}
+                            className="btns1"
+                          >
+                            <BiEdit className="icon-size" />
+                          </button>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <button
+                            onClick={() => handleDelete(item._id)}
+                            className="btns2"
+                          >
+                            <BiTrash className="icon-size" />
+                          </button>
+                        </Tooltip>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -281,9 +242,7 @@ useEffect(() => {
           editingCpo={editingCpo}
           refreshData={loadCpo}
           currentCpoId={currentCpoId}
-          refreshCustomers={refreshCustomers} // new added
-          loadSalesItemsForCPO={loadSalesItemsForCPO} // new added
-          onSave={handleSaveSalesItems} 
+          refreshCustomers={refreshCustomers}
         />
       </Modal>
     </>

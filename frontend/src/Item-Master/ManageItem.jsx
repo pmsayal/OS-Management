@@ -358,7 +358,7 @@ function ManageItem() {
           <h2 className="list-name">Item List:</h2>
           <div>
             <table className="table table-bordered table-striped table-hover shadow">
-              <thead className="table-secondary">
+              <thead className="table-secondary TH-SIZE">
                 <tr>
                   <th onClick={() => sortItems("item")}>
                     Item Name{" "}
@@ -421,7 +421,7 @@ function ManageItem() {
               </thead>
               <tbody>
                 {filteredItems?.map((item) => (
-                  <tr key={item.id}>
+                  <tr key={item.id} className="TD-SIZE">
                     <td>{item.item}</td>
                     <td>{item.supplier?.name || "N/A"}</td>
                     <td>{item.category}</td>
@@ -436,7 +436,7 @@ function ManageItem() {
                             className="btns1"
                             onClick={() => handleEditItem(item)}
                           >
-                            <BiSolidEdit />
+                            <BiSolidEdit className="icon-size"/>
                           </button>
                         </Tooltip>
                         <Tooltip title="Stock">
@@ -444,7 +444,7 @@ function ManageItem() {
                             className="btns1"
                             onClick={() => handleShowItemPrice(item)}
                           >
-                            <BiPackage />
+                            <BiPackage className="icon-size"/>
                           </button>
                         </Tooltip>
                         <Tooltip title="View Utilization">
@@ -452,7 +452,7 @@ function ManageItem() {
                             className="btns1"
                             onClick={() => handleShowStock(item)}
                           >
-                            <BiInfoCircle />
+                            <BiInfoCircle className="icon-size"/>
                           </button>
                         </Tooltip>
                         <Tooltip title="Delete">
@@ -460,7 +460,7 @@ function ManageItem() {
                             className="btns1"
                             onClick={() => handleDelete(item._id)}
                           >
-                            <MdDelete />
+                            <MdDelete className="icon-size"/>
                           </button>
                         </Tooltip>
                       </div>

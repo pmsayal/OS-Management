@@ -240,7 +240,7 @@ function ManagePurchase() {
         <div>
           <h2 className="list-name">Order List:</h2>
           <table className="table table-bordered table-striped">
-            <thead className="table-secondary">
+            <thead className="table-secondary TH-SIZE">
               <tr>
                 <th
                   onClick={() => handleSort("customer.name")}
@@ -294,7 +294,7 @@ function ManagePurchase() {
             <tbody>
               {Array.isArray(purchaseData) &&
                 purchaseData.map((purchase, index) => (
-                  <tr key={index}>
+                  <tr key={index} className="TD-SIZE">
                     <td>{purchase.customer?.name}</td>
                     <td>{purchase.purchase}</td>
                     <td>{purchase.customerpo}</td>
