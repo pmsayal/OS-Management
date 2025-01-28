@@ -61,9 +61,10 @@ function Home() {
             <div className="logout">
               <h3>
                 <FaUser className="User" />
-                <a onClick={handleSignUpClick} style={{ cursor: "pointer" }}>
+                {/* <a href="" onClick={handleSignUpClick} style={{ cursor: "pointer" }}>
                   Sign UP
-                </a>
+                </a> */}
+                <p onClick={handleSignUpClick} style={{ cursor: "pointer" }}>Sign UP</p>
               </h3>
             </div>
           </div>
