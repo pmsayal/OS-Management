@@ -8,8 +8,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 function Home() {
-  const [email, setEmail] = useState("admin123@gmail.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
