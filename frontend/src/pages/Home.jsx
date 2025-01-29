@@ -21,7 +21,7 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("http://localhost:8000/api/login", {
+      const { data } = await axios.post("https://os-management.onrender.com/api/login", {
         email,
         password,
       });

@@ -41,7 +41,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const loadItemsprice = async (selectedItem, pageNumber) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/itemprices?item=${selectedItem.item}&page=${pageNumber}&sortField=${sortField}&sortOrder=${sortOrder}`
+        `https://os-management.onrender.com/api/itemprices?item=${selectedItem.item}&page=${pageNumber}&sortField=${sortField}&sortOrder=${sortOrder}`
       );
       setItemsprice(data.items || []);
       setTotalPages(data.totalPages);
@@ -58,13 +58,13 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
       let response;
       if (editprice) {
         response = await axios.put(
-          `http://localhost:8000/api/itemprices/${editprice._id}`,
+          `https://os-management.onrender.com/api/itemprices/${editprice._id}`,
           formData,
           {headers: { "Content-Type": "multipart/form-data" }}
         );
       } else {
         response = await axios.post(
-          "http://localhost:8000/api/itemprice",
+          "https://os-management.onrender.com/api/itemprice",
           { ...formData, item: selectedItem.item },
           {headers: { "Content-Type": "multipart/form-data" }}
         );
@@ -83,7 +83,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
         setEditprice(null);
         const totalQty = itemprice.reduce((total, price) => total + Number(price.qty), 0);
         onUpdateStock(totalQty);
-        await axios.put(`http://localhost:8000/api/items/${selectedItem._id}`, {
+        await axios.put(`https://os-management.onrender.com/api/items/${selectedItem._id}`, {
           stock: totalQty, 
         });
       }
@@ -117,7 +117,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/api/itemprices/${id}`
+        `https://os-management.onrender.com/api/itemprices/${id}`
       );
 
       if (data?.error) {

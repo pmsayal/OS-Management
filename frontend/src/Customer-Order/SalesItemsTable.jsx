@@ -48,7 +48,7 @@ const SalesItem = ({ currentCpoId,  }) => {
   const loadSalesItems = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/itempos?customerPo=${currentCpoId}`
+        `https://os-management.onrender.com/api/itempos?customerPo=${currentCpoId}`
       );
       setSalesItems(data);
       calculateTotalPrice(data);
@@ -76,7 +76,7 @@ const SalesItem = ({ currentCpoId,  }) => {
   const handleDeleteItem = async (id) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/api/itempos/${id}`
+        `https://os-management.onrender.com/api/itempos/${id}`
       );
       if (data?.error) {
         toast.error(data.error);

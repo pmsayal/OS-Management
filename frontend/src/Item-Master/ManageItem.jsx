@@ -84,7 +84,7 @@ function ManageItem() {
 
     while (hasMore) {
       const supplierResponse = await axios.get(
-        `http://localhost:8000/api/suppliers?page=${currentPage}&limit=10`
+        `https://os-management.onrender.com/api/suppliers?page=${currentPage}&limit=10`
       );
       const suppliers = supplierResponse.data.suppliers;
 
@@ -107,7 +107,7 @@ function ManageItem() {
 
     while (hasMore) {
       const itemResponse = await axios.get(
-        `http://localhost:8000/api/items?page=${currentPage}&limit=10`
+        `https://os-management.onrender.com/api/items?page=${currentPage}&limit=10`
       );
       const items = itemResponse.data.items;
 
@@ -158,7 +158,7 @@ function ManageItem() {
 
   const loadSupplier = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/suppliers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/suppliers");
       if (Array.isArray(data)) {
         setSupplier(data);
       } else {
@@ -173,7 +173,7 @@ function ManageItem() {
   const loadItems = async (page = 1) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/items?page=${page}&limit=${itemsPerPage}`
+        `https://os-management.onrender.com/api/items?page=${page}&limit=${itemsPerPage}`
       );
       setItems(data.items);
       setFilteredItems(data.items);
@@ -212,7 +212,7 @@ function ManageItem() {
   const handleDelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/api/items/${itemId}`
+        `https://os-management.onrender.com/api/items/${itemId}`
       );
       console.log(data);
       if (data?.error) {
@@ -262,7 +262,7 @@ function ManageItem() {
         const formData = new FormData();
         formData.append("item", item.item); 
         formData.append("stock", item.stock);     
-        return axios.post("http://localhost:8000/api/updateStock", formData, {
+        return axios.post("https://os-management.onrender.com/api/updateStock", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -278,7 +278,7 @@ function ManageItem() {
   const loadItemstock = async (itemsToLoad) => {
     try {
       const itemStockRequests = itemsToLoad.map((item) =>
-        axios.get(`http://localhost:8000/api/itemprices?item=${item.item}`)
+        axios.get(`https://os-management.onrender.com/api/itemprices?item=${item.item}`)
       );       
       const responses = await Promise.all(itemStockRequests);
       const stockMap = {};  
@@ -742,7 +742,7 @@ export default ManageItem;
 //         const formData = new FormData();
 //         formData.append("item", item.item);
 //         formData.append("stock", item.stock);
-//         return axios.post("http://localhost:8000/api/updateStock", formData, {
+//         return axios.post("https://os-management.onrender.com/api/updateStock", formData, {
 //           headers: { "Content-Type": "multipart/form-data" },
 //         });
 //       });
@@ -755,7 +755,7 @@ export default ManageItem;
 //   const loadItemstock = async () => {
 //     try {
 //       const itemStockRequests = items.map((item) =>
-//         axios.get(`http://localhost:8000/api/itemprices?item=${item.item}`)
+//         axios.get(`https://os-management.onrender.com/api/itemprices?item=${item.item}`)
 //       );
 //       const responses = await Promise.all(itemStockRequests);
 //       const stockMap = {};

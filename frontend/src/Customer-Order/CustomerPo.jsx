@@ -48,7 +48,7 @@ const SalesOrder = ({
 
   const loadCustomer = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       if (Array.isArray(data.customers)) {
         setCustomers(data.customers);
       } else {
@@ -76,7 +76,7 @@ const SalesOrder = ({
       let response;
       if (editingCpo && editingCpo._id) {
         response = await axios.put(
-          `http://localhost:8000/api/customerpos/${editingCpo._id}`,
+          `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
           formData,
           {
             headers: {
@@ -86,7 +86,7 @@ const SalesOrder = ({
         );
       } else {
         response = await axios.post(
-          "http://localhost:8000/api/customerpo",
+          "https://os-management.onrender.com/api/customerpo",
           formData,
           {
             headers: {

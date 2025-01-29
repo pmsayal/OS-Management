@@ -16,7 +16,7 @@ function Signin() {
   const onSubmits = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("http://localhost:8000/api/register", {
+      const { data } = await axios.post("https://os-management.onrender.com/api/register", {
         name,
         email,
         password,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/customers';
-const API_URl = 'http://localhost:8000/api/customer'; 
+const API_URL = 'https://os-management.onrender.com/api/customers';
+const API_URl = 'https://os-management.onrender.com/api/customer'; 
 
 export const getCustomers = (page, limit, sortField = "", sortOrder = "", searchTerm = "") => {
   return axios.get(`${API_URL}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}${searchTerm ? `&search=${searchTerm}` : ""}`);

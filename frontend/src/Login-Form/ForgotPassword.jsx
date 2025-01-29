@@ -13,7 +13,7 @@
 
 //     try {
 //       const response = await fetch(
-//         "http://localhost:8000/api/forgot-password",
+//         "https://os-management.onrender.com/api/forgot-password",
 //         {
 //           method: "POST",
 //           headers: { "Content-Type": "application/json" },
@@ -100,7 +100,7 @@ function ForgotPassword() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/forgot-password", // Replace with production URL in deployment
+        "https://os-management.onrender.com/api/forgot-password", // Replace with production URL in deployment
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

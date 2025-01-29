@@ -33,7 +33,7 @@ function ManageCPO() {
 
   const loadCpoList = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/customerpos");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customerpos");
       const extractedCustomers =
         data.customers?.map((item) => item.customern) || [];
       setCustomer(extractedCustomers);
@@ -45,7 +45,7 @@ function ManageCPO() {
   const loadCpo = async (page) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/customerpos?page=${page}&limit=${6}`
+        `https://os-management.onrender.com/api/customerpos?page=${page}&limit=${6}`
       );
       setCustomerpo(data.customers || []);
       setTotalPages(data.totalPages || 1);
@@ -57,7 +57,7 @@ function ManageCPO() {
 
   const loadSalesItems = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/itempos`);
+      const { data } = await axios.get(`https://os-management.onrender.com/api/itempos`);
       setSalesItems(data || []);
     } catch (err) {
       console.error("Error loading sales items for CPO:", err);
@@ -80,7 +80,7 @@ function ManageCPO() {
   const handleDelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/api/customerpos/${itemId}`
+        `https://os-management.onrender.com/api/customerpos/${itemId}`
       );
       console.log(data);
       if (data?.error) {
@@ -100,7 +100,7 @@ function ManageCPO() {
 
   const refreshCustomers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       setCustomer(data.customers || []);
     } catch (err) {
       console.log(err);

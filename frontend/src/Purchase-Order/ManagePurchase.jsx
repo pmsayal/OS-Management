@@ -41,7 +41,7 @@ function ManagePurchase() {
 
   const loadcCustomers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       setCustomers(Array.isArray(data.customers) ? data.customers : []);
     } catch (err) {
       console.log(err);
@@ -51,7 +51,7 @@ function ManagePurchase() {
   const loadPurchase = async (page = 1) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/purchases?page=${page}&limit=${pageSize}&sortField=${sortField}&sortOrder=${sortOrder}`
+        `https://os-management.onrender.com/api/purchases?page=${page}&limit=${pageSize}&sortField=${sortField}&sortOrder=${sortOrder}`
       );
       setPurchaseData(data.items);
       const uniquePOs = [
@@ -80,7 +80,7 @@ function ManagePurchase() {
   const handleDelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/api/purchases/${itemId}`
+        `https://os-management.onrender.com/api/purchases/${itemId}`
       );
       if (data?.error) {
         toast.error(data.error);
@@ -128,7 +128,7 @@ function ManagePurchase() {
         const formData = new FormData();
         formData.append("purchase", item.purchase);
         formData.append("totalPurchase", item.totalPurchase);
-        return axios.post("http://localhost:8000/api/purchasetotal", formData, {
+        return axios.post("https://os-management.onrender.com/api/purchasetotal", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -149,7 +149,7 @@ function ManagePurchase() {
     try {
       const purchasePiceRequests = itemsToLoad.map((item) =>
         axios.get(
-          `http://localhost:8000/api/itemppos?purchaseOrderId=${item._id}`
+          `https://os-management.onrender.com/api/itemppos?purchaseOrderId=${item._id}`
         )
       );
       const responses = await Promise.all(purchasePiceRequests);

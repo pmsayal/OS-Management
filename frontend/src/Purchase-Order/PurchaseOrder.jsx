@@ -83,7 +83,7 @@ console.log("purchaseEditing",purchaseEditing)
       let hasMore = true;
       while (hasMore) {
         const { data } = await axios.get(
-          `http://localhost:8000/api/customers?page=${currentPage}&limit=10`
+          `https://os-management.onrender.com/api/customers?page=${currentPage}&limit=10`
         );
         const customers = data.customers;
         allCustomers = [...allCustomers, ...customers];
@@ -102,7 +102,7 @@ console.log("purchaseEditing",purchaseEditing)
   const loadCpo = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8000/api/allCustomerPos"
+        "https://os-management.onrender.com/api/allCustomerPos"
       );
       setCustomerPOs(data.customers || []);
     } catch (err) {
@@ -120,7 +120,7 @@ const handleSubmit = async (event) => {
   try {
     if (purchaseEditing && purchaseEditing._id) {
       const { data } = await axios.put(
-        `http://localhost:8000/api/purchases/${purchaseEditing._id}`,
+        `https://os-management.onrender.com/api/purchases/${purchaseEditing._id}`,
         {
           customer,
           customerpo,
@@ -139,7 +139,7 @@ const handleSubmit = async (event) => {
       }
     } else {
       const { data } = await axios.post(
-        "http://localhost:8000/api/purchase",
+        "https://os-management.onrender.com/api/purchase",
         {
           customer,
           customerpo,

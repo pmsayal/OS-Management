@@ -31,7 +31,7 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
     const loadSuppliers = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8000/api/suppliers/all"
+          "https://os-management.onrender.com/api/suppliers/all"
         );
         console.log("Fetched suppliers:", data);
 
@@ -66,14 +66,14 @@ const AddItem = ({ editingItem, setVisible, loadItems }) => {
       let res;
       if (editingItem && editingItem._id) {
         res = await axios.put(
-          `http://localhost:8000/api/items/${editingItem._id}`,
+          `https://os-management.onrender.com/api/items/${editingItem._id}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
       } else {
-        res = await axios.post("http://localhost:8000/api/item", formData, {
+        res = await axios.post("https://os-management.onrender.com/api/item", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }

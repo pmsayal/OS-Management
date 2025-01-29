@@ -32,7 +32,7 @@ function ManageSupplier() {
 
   const loadSuppliers = async (page, sortField = "", sortOrder = "") => {
     try {
-      const query = `http://localhost:8000/api/suppliers?search=${searchTerm}&page=${page}&limit=10&sortField=${sortField}&sortOrder=${sortOrder}&_=${new Date().getTime()}`;
+      const query = `https://os-management.onrender.com/api/suppliers?search=${searchTerm}&page=${page}&limit=10&sortField=${sortField}&sortOrder=${sortOrder}&_=${new Date().getTime()}`;
       const { data } = await getSuppliers(page, 10, sortField, sortOrder, searchTerm);
       setSuppliers(data.suppliers);
       setTotalPages(data.totalPages);

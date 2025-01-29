@@ -53,7 +53,7 @@ function AddPurchaseItem(
 
   const loaditems = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/itemppos");
+      const { data } = await axios.get("https://os-management.onrender.com/api/itemppos");
       if (Array.isArray(data)) {
         setItems(data);
       } else {
@@ -70,7 +70,7 @@ function AddPurchaseItem(
     if (isEditing && purchaseEditing) {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/api/itemppos?purchaseOrderId=${purchaseEditing._id}`
+          `https://os-management.onrender.com/api/itemppos?purchaseOrderId=${purchaseEditing._id}`
         );
         setPurchaseItems(Array.isArray(data) ? data : []);
         calculateTotalPrice(data); 
@@ -86,7 +86,7 @@ function AddPurchaseItem(
   const handlePODelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/api/itemppos/${itemId}`
+        `https://os-management.onrender.com/api/itemppos/${itemId}`
       );
       console.log(data);
 
