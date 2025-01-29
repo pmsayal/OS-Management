@@ -28,8 +28,6 @@ function Signin() {
         localStorage.setItem("auth", JSON.stringify(data));
         toast.success("Register successful");
         navigate("/dashboard");
-        // navigate("/");
-
       }
     } catch (err) {
       console.log(err);
