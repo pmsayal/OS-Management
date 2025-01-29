@@ -57,6 +57,10 @@
   flex-direction: column;
 }
 
+.ss {
+  color: transparent;
+}
+
 .nav-link-background {
   /* background-color: #124e88; */
 }
