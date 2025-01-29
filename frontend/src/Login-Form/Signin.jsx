@@ -27,8 +27,8 @@ function Signin() {
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
         toast.success("Register successful");
-        // navigate("/dashboard");
-        navigate("/");
+        navigate("/dashboard");
+        // navigate("/");
 
       }
     } catch (err) {
