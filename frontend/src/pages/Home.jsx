@@ -11,12 +11,13 @@ function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,18 +26,29 @@ function Home() {
         email,
         password,
       });
+  
       if (data?.error) {
-        toast.error(data.error);
+        toast.error(data.error); 
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
         toast.success("Login successful");
         navigate("/dashboard");
       }
     } catch (err) {
-      toast.error("Login failed. Try again.");
+      if (err.response && err.response.data && err.response.data.error) {
+        if (err.response.data.error === "User not found") {
+          toast.error("User not found, please check your email");
+        } else if (err.response.data.error === "Incorrect password") {
+          toast.error("Incorrect password, please try again");
+        } else {
+          toast.error(err.response.data.error);  
+        }
+      } else {
+        toast.error("Login failed. Try again.");
+      }
     }
   };
-
+  
   const handleSignUpClick = () => {
     setIsLogin(true);
   };
@@ -44,7 +56,7 @@ function Home() {
   return (
     <div>
       {isLogin ? (
-        <Signin />
+        <Signin setIsLogin={setIsLogin} />
       ) : (
         <>
           <div className="navbar">
@@ -61,10 +73,13 @@ function Home() {
             <div className="logout">
               <h3>
                 <FaUser className="User" />
-                {/* <a href="" onClick={handleSignUpClick} style={{ cursor: "pointer" }}>
+                <p
+                  onClick={handleSignUpClick}
+                  style={{ cursor: "pointer" }}
+                  className="SIGNUP"
+                >
                   Sign UP
-                </a> */}
-                <p onClick={handleSignUpClick} style={{ cursor: "pointer" }} className="SIGNUP">Sign UP</p>
+                </p>
               </h3>
             </div>
           </div>
@@ -92,7 +107,6 @@ function Home() {
                     />
                     <MdEmail className="icon" />
                   </div>
-                  <span className="error"></span>
                 </div>
 
                 <div className="input-groups">
@@ -116,17 +130,20 @@ function Home() {
                       />
                     )}
                   </div>
-                  <span className="error"></span>
                 </div>
+
+
                 <div className="switch">
                   <div className="buttonForget">
-                    <Link to="/forgot" >
-                      Forgot Password?
+                    <Link to="/forgot">
+                      <button className="StyledButton2" type="button">
+                        Forgot Password?
+                      </button>
                     </Link>
                   </div>
                 </div>
 
-                <button className="button" type="submit">
+                <button className="StyledButton1" type="submit">
                   Login
                 </button>
               </form>
@@ -139,3 +156,4 @@ function Home() {
 }
 
 export default Home;
+

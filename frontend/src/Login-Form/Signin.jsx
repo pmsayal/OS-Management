@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
-import Header from "../Header/Header";
-import "./Sign.css";
-import "../StyleCSS/Main.css";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
+import "../StyleCSS/Main.css";
 
-function Signin() {
-  const [login, setLogin] = useState(false);
+function Signin({ setIsLogin }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,11 +14,10 @@ function Signin() {
     e.preventDefault();
     try {
       const { data } = await axios.post("https://os-management.onrender.com/api/register", {
-        name,
+        name, //https://os-management.onrender.com
         email,
         password,
       });
-      console.log(data);
       if (data?.error) {
         toast.error(data.error);
       } else {
@@ -30,8 +26,7 @@ function Signin() {
         navigate("/dashboard");
       }
     } catch (err) {
-      console.log(err);
-      toast.error("Login failed. Try again.");
+      toast.error("Email is Exist Registration failed. Try again.");
     }
   };
 
@@ -49,54 +44,58 @@ function Signin() {
           </Link>
         </div>
       </div>
+
       <div className="home-container">
         <div className="login-form-container">
           <div>
             <img src="login-v2.svg" alt="images logo" className="login-img" />
           </div>
-          <>
-            <form onSubmit={onSubmits} className="Sign-Up-form">
-              <h2>Sign Up</h2>
-              <div className="input-groups">
-                <div>
-                  <input
-                    type="name"
-                    placeholder="name "
-                    name="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                <span className="error">{}</span>
+          <form onSubmit={onSubmits} className="Sign-Up-form">
+            <h2>Sign Up</h2>
+            <div className="input-groups">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
-              <div className="input-groups">
-                <div>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <span className="error">{}</span>
+            </div>
+            <div className="input-groups">
+              <div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
-              <div className="input-groups">
-                <div>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <span className="error">{}</span>
+            </div>
+            <div className="input-groups">
+              <div>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
+            </div>
 
-              <button type="submit" className="button">Sign Up</button>
-            </form>
-          </>
+            <div className="signup-siginin">
+              <button type="submit" className="StyledButton1">
+                Sign Up
+              </button>
+              <p className="switch-login">
+                Already have an account?{" "}
+                <button className="switch-login-button" onClick={() => setIsLogin(false)}>Sign In</button>
+              </p>
+            </div>
+          </form>
         </div>
       </div>
     </div>

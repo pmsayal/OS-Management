@@ -26,7 +26,7 @@ function ManagePurchase() {
   const [associatedItems, setAssociatedItems] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
 
-  const [purchasePrice, setPurchasePrice] = useState(null);
+
 
   useEffect(() => {
     loadPurchase();
@@ -186,6 +186,12 @@ function ManagePurchase() {
     }
   }, [purchaseData]);
 
+  const refreshPurchaseData = () => {
+    loadPurchase(currentPage); 
+  };
+
+
+
   return (
     <>
       <div className="main-container">
@@ -315,7 +321,7 @@ function ManagePurchase() {
                             onClick={() => handleEditPurchase(purchase)}
                             className="btns1"
                           >
-                            <BiEdit />
+                            <BiEdit className="icon-size"/>
                           </button>
                         </Tooltip>
                         <Tooltip
@@ -330,7 +336,7 @@ function ManagePurchase() {
                             onClick={() => handleDelete(purchase._id)}
                             className="btns2"
                           >
-                            <BiTrash />
+                            <BiTrash className="icon-size"/>
                           </button>
                         </Tooltip>
                       </div>
@@ -357,6 +363,8 @@ function ManagePurchase() {
             customerpO={selectedCPO}
             handleAddPurchaseItem={handleAddPurchaseItem}
             // updatePurchaseTotal={updatePurchaseTotal}
+            setVisible={setVisible}
+            onSuccess={refreshPurchaseData}
           />
         </Modal>
         <Pagination
@@ -364,7 +372,7 @@ function ManagePurchase() {
           total={totalPages * pageSize}
           pageSize={pageSize}
           onChange={onPageChange}
-          showSizeChanger={false}
+          showSizeChanger={false}          
         />
       </div>
     </>

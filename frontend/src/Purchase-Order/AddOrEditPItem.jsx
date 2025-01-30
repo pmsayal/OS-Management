@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import moment from "moment";
 import "../StyleCSS/Customer.css";
 
-const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, purchaseEditing  }) => {
+const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, purchaseEditing, onSuccess,  }) => {
   const [items, setItems] = useState([]);
   const [item, setItem] = useState("");
   const [availableQTY, SetAvailableQTY] = useState(availableQty);
@@ -135,6 +135,7 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
           } successfully`
         );
         setShowAddOrEdit(false);
+        onSuccess();
       }
     } catch (err) {
       console.error("Save Error:", err.response || err);

@@ -137,6 +137,16 @@
   margin-top: 12px;
 }
 
+.switch-login {
+  margin-top: 5px;
+}
+
+.signup-siginin {
+  display: flex;
+  justify-content: space-between;
+}
+
+
 /*form-forget*/
 .form-forget {
   position: absolute;
@@ -166,8 +176,35 @@
   color: white;
 }
 
-.button {
-  padding: 8px 16px;
+
+
+.StyledButton1 {
+  font-size: 20px;
+  color: #fffcfc;
+  background-color: #007bff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.StyledButton2 {
+  font-size: 20px;
+  color: #fffcfc;
+  background-color: red;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+
+.buttons {
+  padding: 4px 14px;
   border: none;
   border-radius: 4px;
   background-color: #4caf50;
@@ -175,7 +212,9 @@
   cursor: pointer;
 }
 
-.buttonForget {
+
+
+/* .buttonForget {
   display: inline-block;
   background-color: #009dff;
   color: white;
@@ -186,9 +225,21 @@
   border: none;
   cursor: pointer;
   text-align: center;
-}
+} */
 
 /* .buttonForget:hover {
     background-color: #0056b3; 
   }
    */
+
+
+.switch-login-button {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  text-decoration: "none";
+}
+  

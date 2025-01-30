@@ -6,14 +6,14 @@ import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 import "../StyleCSS/SalesPurchase.css";
 
-const PurchaseOrder = (
-  { 
-    purchaseEditing, 
-    isEditing, 
-    customerId, 
-    customerpO,
-    // updatePurchaseTotal 
-  }) => {
+const PurchaseOrder = ({
+  purchaseEditing,
+  isEditing,
+  customerId,
+  customerpO,
+  setVisible,
+  onSuccess,
+}) => {
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState("");
   const [customerPOs, setCustomerPOs] = useState([]);
@@ -23,35 +23,29 @@ const PurchaseOrder = (
   const [status, setStatus] = useState("");
   const [showAddOrEdit, setShowAddOrEdit] = useState(false);
   const [editpo, setEditpo] = useState(null);
-  const [customerList, setCustomerList] = useState([]);
   const [purchaseItems, setPurchaseItems] = useState([]);
   const [filteredCPOs, setFilteredCPOs] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [totalPurchasePrice, setTotalPurchasePrice] = useState(0);
-  
 
-console.log("purchaseEditing",purchaseEditing)
   useEffect(() => {
     if (purchaseEditing && purchaseEditing._id) {
       const customerData = customers.find(c => c._id === purchaseEditing.customer._id);
-      setCustomer(customerData ? customerData._id : ""); 
-      setCustomerpo(purchaseEditing.customerpo || customerpO); 
-      setPurchase(purchaseEditing.purchase); 
-      setDate(purchaseEditing.date ? new Date(purchaseEditing.date).toISOString().split('T')[0] : ""); // Set the date
-      setStatus(purchaseEditing.status); 
-      setPurchaseItems(purchaseEditing.items || []); 
+      setCustomer(customerData ? customerData._id : "");
+      setCustomerpo(purchaseEditing.customerpo || customerpO);
+      setPurchase(purchaseEditing.purchase);
+      setDate(purchaseEditing.date ? new Date(purchaseEditing.date).toISOString().split('T')[0] : "");
+      setStatus(purchaseEditing.status);
+      setPurchaseItems(purchaseEditing.items || []);
       const filtered = customerPOs.filter(po => po.customern._id === (customerData ? customerData._id : ""));
       setFilteredCPOs(filtered);
     } else {
       setCustomer("");
       setCustomerpo("");
-      setDate(""); 
+      setDate("");
       setPurchase("");
       setStatus("");
       setPurchaseItems([]);
     }
   }, [purchaseEditing, customers, customerpO]);
-
 
   const handleAddPurchaseItem = (newItem) => {
     setPurchaseItems((prevItems) => [
@@ -64,17 +58,6 @@ console.log("purchaseEditing",purchaseEditing)
     loadCustomers();
     loadCpo();
   }, []);
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB");
-  };
-
-  const handleDateChange = (event) => {
-    const isoDate = event.target.value;
-    setDate(formatDate(isoDate));
-  };
 
   const loadCustomers = async () => {
     try {
@@ -99,6 +82,7 @@ console.log("purchaseEditing",purchaseEditing)
       setCustomers([]);
     }
   };
+
   const loadCpo = async () => {
     try {
       const { data } = await axios.get(
@@ -110,67 +94,58 @@ console.log("purchaseEditing",purchaseEditing)
     }
   };
 
-  useEffect(() => {
-    setCustomerList(customers);
-  }, [customers]);
-
- 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  try {
-    if (purchaseEditing && purchaseEditing._id) {
-      const { data } = await axios.put(
-        `https://os-management.onrender.com/api/purchases/${purchaseEditing._id}`,
-        {
-          customer,
-          customerpo,
-          date,
-          status,
-          purchase,
-          items: purchaseItems,
-        },
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      if (data.error) {
-        console.log(data.error);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      if (purchaseEditing && purchaseEditing._id) {
+        const { data } = await axios.put(
+          `https://os-management.onrender.com/api/purchases/${purchaseEditing._id}`,
+          {
+            customer,
+            customerpo,
+            date,
+            status,
+            purchase,
+            items: purchaseItems,
+          },
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          toast.success("Purchase updated successfully!");
+          setVisible(false);
+          onSuccess();
+        }
       } else {
-        toast.success("Purchase updated successfully!");
-        // await updatePurchaseTotal(purchaseEditing._id);
+        const { data } = await axios.post(
+          "https://os-management.onrender.com/api/purchase",
+          {
+            customer,
+            customerpo,
+            date,
+            status,
+            purchase,
+            items: purchaseItems,
+          },
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          toast.success("Purchase created successfully!");
+          setVisible(false);
+          onSuccess();
+        }
       }
-    } else {
-      const { data } = await axios.post(
-        "https://os-management.onrender.com/api/purchase",
-        {
-          customer,
-          customerpo,
-          date,
-          status,
-          purchase,
-          items: purchaseItems,
-        },
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        toast.success("Purchase created successfully!");
-        // await updatePurchaseTotal(data._id);
-      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
-  
-
-  const handleAddItemClick = () => {
-    setShowAddOrEdit(true);
   };
 
   const handleCustomerChange = (e) => {
     const selectedCustomerId = e.target.value;
     setCustomer(selectedCustomerId);
-  
     const filtered = customerPOs.filter(
       (po) => po.customern._id === selectedCustomerId
     );
@@ -184,7 +159,8 @@ const handleSubmit = async (event) => {
           editpo={editpo}
           setShowAddOrEdit={setShowAddOrEdit}
           customerId={customerId}
-          purchaseEditing={purchaseEditing} 
+          purchaseEditing={purchaseEditing}
+          onSuccess={onSuccess}
         />
       ) : (
         <form onSubmit={handleSubmit} className="Purchaseorder-form">
@@ -236,15 +212,14 @@ const handleSubmit = async (event) => {
                 <label htmlFor="customerpo" className="lblCPO">
                   CPO:<span className="required-field">*</span>
                 </label>
-
                 <select
-                  id="customer"
+                  id="customerpo"
                   value={customerpo}
                   onChange={(e) => setCustomerpo(e.target.value)}
                   className="customer-salesorder_input scrollable-dropdown"
                 >
                   <option value="" disabled>
-                    Select CustomerCpo
+                    Select Customer CPO
                   </option>
                   {filteredCPOs.map((cpo) => (
                     <option key={cpo._id} value={cpo.customerpo}>
@@ -272,7 +247,7 @@ const handleSubmit = async (event) => {
             <div className="ButtonContainer">
               <div className="labelinputfield">
                 <label htmlFor="purchase" className="invoice-salesorder_label">
-                  Purchase No. :<span className="required-field">*</span>
+                  Purchase No.:<span className="required-field">*</span>
                 </label>
                 <input
                   type="text"
@@ -285,7 +260,7 @@ const handleSubmit = async (event) => {
               <div className="labelinputfield">
                 <button
                   type="button"
-                  onClick={handleAddItemClick}
+                  onClick={() => setShowAddOrEdit(true)}
                   className="Add-P-Item"
                 >
                   Add Purchase Item
@@ -301,14 +276,12 @@ const handleSubmit = async (event) => {
             setEditpo={setEditpo}
             isEditing={isEditing}
             purchaseEditing={purchaseEditing}
-            setTotalPurchasePrice={setTotalPurchasePrice}
-            availableQty={selectedItem ? selectedItem.stock : 0}
+            onSuccess={onSuccess}
           />
-
 
           <div className="ButtonContainer">
             <button type="submit" className="StyledButton1">
-              Save
+              {isEditing ? "Update" : "Save"}
             </button>
             <button type="button" className="StyledButton11">
               Clear
