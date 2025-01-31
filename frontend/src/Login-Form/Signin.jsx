@@ -14,7 +14,7 @@ function Signin({ setIsLogin }) {
     e.preventDefault();
     try {
       const { data } = await axios.post("https://os-management.onrender.com/api/register", {
-        name, //https://os-management.onrender.com
+        name, ////https://os-management.onrender.com
         email,
         password,
       });

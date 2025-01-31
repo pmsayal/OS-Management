@@ -70,7 +70,6 @@ const SalesItem = ({ currentCpoId,  }) => {
       return sum + finalPrice;
     }, 0);
     setTotalCustomerPOLocal(total);
-    // onTotalPriceChange(total); 
   };
 
   const handleDeleteItem = async (id) => {

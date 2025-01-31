@@ -11,19 +11,16 @@ function ManageCPO() {
   const [visible, setVisible] = useState(false);
   const [customerpo, setCustomerpo] = useState([]);
   const [customern, setCustomern] = useState("");
-  const [customer, setCustomer] = useState([]);
+  const [customer, setCustomer] = useState([]); // Default empty array
   const [editingCpo, setEditingCpo] = useState(null);
   const [orderDate, setOrderDate] = useState("");
   const [salesItems, setSalesItems] = useState([]);
   const [currentCpoId, setCurrentCpoId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
   const [cpoList, setCpoList] = useState([]);
-  const [sortField, setSortField] = useState("createdAt");
-  const [sortOrder, setSortOrder] = useState("desc");
   const [selectedCpoId, setSelectedCpoId] = useState();
-  const [totalSalesPrices, setTotalSalesPrices] = useState({});
 
   useEffect(() => {
     loadCpo(currentPage);
@@ -34,11 +31,9 @@ function ManageCPO() {
   const loadCpoList = async () => {
     try {
       const { data } = await axios.get("https://os-management.onrender.com/api/customerpos");
-      const extractedCustomers =
-        data.customers?.map((item) => item.customern) || [];
-      setCustomer(extractedCustomers);
+      setCustomer(data.customers || []); // Ensure it is always an array
     } catch (err) {
-      console.log("Error loading customers:", err);
+      console.error("Error loading customers:", err);
     }
   };
 
@@ -51,7 +46,7 @@ function ManageCPO() {
       setTotalPages(data.totalPages || 1);
       setCpoList(data.customers?.map((item) => item.customerpo) || []);
     } catch (err) {
-      console.log(err);
+      console.error("Error loading CPO:", err);
     }
   };
 
@@ -65,16 +60,14 @@ function ManageCPO() {
     }
   };
 
-  const handleEditItem = async (item) => {
+  const handleEditItem = (item) => {
     setEditingCpo(item);
     setVisible(true);
     setCurrentCpoId(item._id);
-    console.log("Editing CPO ID: ", item._id);
   };
 
-  const handleCpoSelect = async (cpoId) => {
+  const handleCpoSelect = (cpoId) => {
     setSelectedCpoId(cpoId);
-    // loadSalesItemsForCPO(cpoId);
   };
 
   const handleDelete = async (itemId) => {
@@ -82,29 +75,19 @@ function ManageCPO() {
       const { data } = await axios.delete(
         `https://os-management.onrender.com/api/customerpos/${itemId}`
       );
-      console.log(data);
       if (data?.error) {
         toast.error(data.error);
       } else {
-        toast.success(`${data.message}`);
+        toast.success(data.message);
         loadCpo(currentPage);
       }
     } catch (err) {
-      console.log(err);
+      console.error("Error deleting CPO:", err);
     }
   };
 
   const onPageChange = (page) => {
     setCurrentPage(page);
-  };
-
-  const refreshCustomers = async () => {
-    try {
-      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
-      setCustomer(data.customers || []);
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (
@@ -114,11 +97,16 @@ function ManageCPO() {
         <div className="StyledDiv">
           <div className="ButtonContainer">
             <div className="Dropdown-item">
+              {/* Customer Dropdown with safe handling */}
               <Select
                 name="customern"
-                value={customer.find((c) => c._id === customern)}
+                value={
+                  customer.length > 0
+                    ? customer.find((c) => c._id === customern) || null
+                    : null
+                }
                 onChange={(selectedOption) =>
-                  setCustomern(selectedOption.value)
+                  setCustomern(selectedOption?.value || "")
                 }
                 className="SearchbelDropdown"
                 placeholder="Select Customer"
@@ -155,7 +143,7 @@ function ManageCPO() {
                 className="searchitem"
                 placeholder="Search..."
               />
-              <button className="StyledButton" onClick={() => {}}>
+              <button className="StyledButton">
                 <BiSearch className="SearchIcon" />
                 Search
               </button>
@@ -192,10 +180,10 @@ function ManageCPO() {
 
                 return (
                   <tr key={item._id} className="TD-SIZE">
-                    <td>{item.customern?.name}</td>
+                    <td>{item.customern?.name || ""}</td>
                     <td>{item.customerpo}</td>
                     <td>{new Date(item.date).toLocaleDateString()}</td>
-                    <td>{totalSalesPrice.toFixed(2)}</td>{" "}
+                    <td>{totalSalesPrice.toFixed(2)}</td>
                     <td>{item.status}</td>
                     <td>
                       <div className="button-group">
@@ -241,8 +229,6 @@ function ManageCPO() {
           setVisible={setVisible}
           editingCpo={editingCpo}
           refreshData={loadCpo}
-          currentCpoId={currentCpoId}
-          refreshCustomers={refreshCustomers}
         />
       </Modal>
     </>
@@ -250,3 +236,4 @@ function ManageCPO() {
 }
 
 export default ManageCPO;
+

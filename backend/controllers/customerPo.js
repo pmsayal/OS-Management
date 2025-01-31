@@ -3,6 +3,7 @@ import Itemprice from "../models/itemPrice.js";
 import dotenv from "dotenv";
 import CustomerPO from "../models/customerPO.js";
 import Customer from "../models/customers.js";
+import ItemPo from "../models/itemPo.js";
 
 dotenv.config();
 export const createCustomerPo = async (req, res) => {
@@ -60,13 +61,11 @@ export const createCustomerTotal = async (req, res) => {
   try {
     const { customerpo, cpoTotal } = req.fields;
     // console.log("Received Payload in Backend", req.fields);
-
     if (isNaN(cpoTotal) || cpoTotal === undefined || cpoTotal === null) {
       cpoTotal = 0;
     } else {
       cpoTotal = Number(cpoTotal);
     }
-
     const updatedCustomerPO = cpoTotal.findOneAndUpdate(
       { customerpo: customerpo },
       { $set: { cpoTotal } },
@@ -75,7 +74,6 @@ export const createCustomerTotal = async (req, res) => {
     if (!updatedCustomerPO) {
       return res.status(404).json({ error: "Customer PO not found" });
     }
-
     res.status(200).json(updatedCustomerPO);
   } catch (err) {
     console.error("Error in createCustomerTotal:", err);

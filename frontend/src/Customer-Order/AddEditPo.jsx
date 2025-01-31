@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 
-const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => {
+const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
   const [items, setItems] = useState([]);
   const [item, setItem] = useState("");
   const [qty, setQty] = useState("");
@@ -19,7 +19,9 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
   useEffect(() => {
     const loadItems = async () => {
       try {
-        const { data } = await axios.get("https://os-management.onrender.com/api/items");
+        const { data } = await axios.get(
+          "https://os-management.onrender.com/api/items"
+        );
         if (Array.isArray(data.items)) {
           setItems(data.items);
         } else {
@@ -33,32 +35,28 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
     loadItems();
   }, []);
 
-
   const handleItemChange = (e) => {
     const selectedItemId = e.target.value;
     setItem(selectedItemId);
     const selectedItem = items.find((i) => i._id === selectedItemId);
     if (selectedItem) {
-      const stock = selectedItem.stock; 
-      setAvailableQty(stock);  
-      setAllocatedQty(0); 
-      setRemainingQty(stock); 
+      const stock = selectedItem.stock;
+      setAvailableQty(stock);
+      setAllocatedQty(0);
+      setRemainingQty(stock);
     } else {
       console.log("Selected item not found");
     }
   };
 
-
   useEffect(() => {
-    if(qty !== "") {
+    if (qty !== "") {
       const remainingQty = availableQty - parseInt(qty);
-      setRemainingQty(remainingQty >= 0 ? remainingQty : 0); 
-    } else{
+      setRemainingQty(remainingQty >= 0 ? remainingQty : 0);
+    } else {
       setRemainingQty(availableQty);
     }
-  },[qty, availableQty]);
-
-
+  }, [qty, availableQty]);
 
   useEffect(() => {
     const qtyNum = parseFloat(qty) || 0;
@@ -71,15 +69,12 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
   }, [qty, cost, tax]);
 
   useEffect(() => {
-    console.log("Current CPO ID in AddEditPo:", currentCpoId); // Check the current CPO ID
+    console.log("Current CPO ID in AddEditPo:", currentCpoId);
   }, [currentCpoId]);
-
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const formData = new FormData();
       formData.append("item", item);
@@ -88,7 +83,9 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
       formData.append("tax", tax);
       formData.append("salesPrice", salesPrice);
       formData.append("customerPo", currentCpoId);
-  
+      
+      console.log("FormData: ",formData)
+
       const response = await axios.post(
         "https://os-management.onrender.com/api/itempo",
         formData,
@@ -96,30 +93,31 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-  
 
-      if (response.status === 201 && response.data) {
+      console.log("Response from server:", response.data);
+
+      if (response.status === 201 ) {
         toast.success(response.data.message || "Item added successfully!");
         refreshData();
         onAddItem(response.data);
         closeAddForm();
       } else {
-
         toast.error(response.data.error || "Unexpected error occurred.");
       }
     } catch (err) {
       console.error("Error:", err.message);
-      toast.error("ERROR: Failed to add item due to server error.");
+      toast.error("ERROR: Failed to add item due server  error.");
     }
   };
-  
 
   return (
     <form onSubmit={handleSubmit} className="salesorder-form">
       <h3 className="form-heading">Add SalesItem</h3>
       <div className="customer-form">
         <label htmlFor="item" className="customer-form__label">
-          <span>Item: <span className="required-field">*</span></span>
+          <span>
+            Item: <span className="required-field">*</span>
+          </span>
           <select
             id="item"
             value={item}
@@ -148,7 +146,9 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
         />
 
         <label htmlFor="avlqty" className="customer-form__label">
-          <span>Allocated Qty: <span className="required-field">*</span></span>
+          <span>
+            Allocated Qty: <span className="required-field">*</span>
+          </span>
           <input
             type="number"
             id="avlqty"
@@ -171,7 +171,9 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
         />
 
         <label htmlFor="cost" className="customer-form__label">
-         <span>Unit Cost: <span className="required-field">*</span></span>
+          <span>
+            Unit Cost: <span className="required-field">*</span>
+          </span>
           <input
             type="text"
             id="cost"
@@ -183,7 +185,9 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm   }) => 
         </label>
 
         <label htmlFor="tax" className="customer-form__label">
-          <span>Tax: <span className="required-field">*</span></span>
+          <span>
+            Tax: <span className="required-field">*</span>
+          </span>
           <input
             type="text"
             id="tax"

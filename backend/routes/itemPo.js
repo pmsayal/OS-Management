@@ -8,7 +8,6 @@ const router = express.Router();
 router.post('/itempo', ExpressFormidable(), createItemPo);
 router.get('/itempos', listItemPo);
 router.put("/itempos/:id", updateItemPo);
-
 router.delete('/itempos/:id', removeItemPo);
 
 export default router;

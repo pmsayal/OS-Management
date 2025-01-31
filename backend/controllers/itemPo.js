@@ -1,7 +1,7 @@
 import slugify from "slugify";
 import dotenv from "dotenv";
 import ItemPo from "../models/itemPo.js";
-// import customerPO from "../models/customerPO.js";
+import customerPO from "../models/customerPO.js";
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -62,7 +62,7 @@ export const removeItemPo = async (req, res) => {
       return res.status(404).json({ error: 'Item not found' });
     }
 
-    res.json({ message: 'IPO deleted successfully', item });
+    res.json({ message: 'CPO Item deleted successfully', item });
   } catch (err) {
     console.error('Error deleting item:', err);
     res.status(500).json({ error: 'Internal Server Error' });
