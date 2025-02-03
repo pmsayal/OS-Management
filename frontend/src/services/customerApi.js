@@ -63,6 +63,8 @@ export const searchCustomers = (searchTerm) => {
   return axios.get(`${API_URL}?search=${searchTerm}`);
 };
 
+
+//new Code
 export const checkExistingRecords = async (email, phone, gstn) => {
   const response = await axios.get(`${API_URl_VERIFY}?email=${email}&phone=${phone}&gstn=${gstn}`);
   return {
