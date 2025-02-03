@@ -47,7 +47,7 @@
 
 //   const loadCustomer = async () => {
 //     try {
-//       const { data } = await axios.get("https://os-management.onrender.com/api/customers");
+//       const { data } = await axios.get("https://os-management.onrender.com/customers");
 //       if (Array.isArray(data.customers)) {
 //         setCustomers(data.customers);
 //       } else {
@@ -75,7 +75,7 @@
 //   //     let response;
 //   //     if (editingCpo && editingCpo._id) {
 //   //       response = await axios.put(
-//   //         `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
+//   //         `https://os-management.onrender.com/customerpos/${editingCpo._id}`,
 //   //         formData,
 //   //         {
 //   //           headers: {
@@ -85,7 +85,7 @@
 //   //       );
 //   //     } else {
 //   //       response = await axios.post(
-//   //         "https://os-management.onrender.com/api/customerpo",
+//   //         "https://os-management.onrender.com/customerpo",
 //   //         formData,
 //   //         {
 //   //           headers: {
@@ -123,7 +123,7 @@
 //       formData.append("status", status);
   
 //       const response = await axios.post(
-//         "https://os-management.onrender.com/api/customerpo",
+//         "https://os-management.onrender.com/customerpo",
 //         formData,
 //         {
 //           headers: {
@@ -149,7 +149,7 @@
 //       formData.append("status", status);
   
 //       const response = await axios.put(
-//         `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
+//         `https://os-management.onrender.com/customerpos/${editingCpo._id}`,
 //         formData,
 //         {
 //           headers: {
@@ -356,7 +356,7 @@ const SalesOrder = ({
 
   const loadCustomer = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/customers");
       if (Array.isArray(data.customers)) {
         setCustomers(data.customers);
       } else {
@@ -381,7 +381,7 @@ const SalesOrder = ({
       formData.append("status", status);
   
       const response = await axios.post(
-        "https://os-management.onrender.com/api/customerpo",
+        "https://os-management.onrender.com/customerpo",
         formData,
         {
           headers: {
@@ -408,7 +408,7 @@ const SalesOrder = ({
       formData.append("status", status);
   
       const response = await axios.put(
-        `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
+        `https://os-management.onrender.com/customerpos/${editingCpo._id}`,
         formData,
         {
           headers: {

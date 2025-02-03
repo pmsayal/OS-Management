@@ -1,7 +1,45 @@
+// import axios from 'axios';
+
+// const API_URL = 'https://os-management.onrender.com/customers';
+// const API_URl = 'https://os-management.onrender.com/customer'; 
+// const API_URl_VERIFY = 'https://os-management.onrender.com/customers/check-existing';
+
+// export const getCustomers = (page, limit, sortField = "", sortOrder = "", searchTerm = "") => {
+//   return axios.get(`${API_URL}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}${searchTerm ? `&search=${searchTerm}` : ""}`);
+// };
+
+// export const createCustomer = (customerData) => {
+//   return axios.post(API_URl, customerData, {
+//     headers: { "Content-Type": "multipart/form-data" },
+//   });
+// };
+
+
+
+// export const updateCustomer = (customerId, customerData) => {
+//   return axios.put(`${API_URL}/${customerId}`, customerData);
+// };
+
+// export const deleteCustomer = (customerId) => {
+//   return axios.delete(`${API_URL}/${customerId}`);
+// };
+
+// export const searchCustomers = (searchTerm) => {
+//   return axios.get(`${API_URL}?search=${searchTerm}`);
+// };
+
+
+// export const checkExistingRecords = (email, phone, gstn) => {
+//   return axios.get(`${API_URl_VERIFY}?email=${email}&phone=${phone}`);
+// };
+
+
+
 import axios from 'axios';
 
-const API_URL = 'https://os-management.onrender.com/api/customers';
-const API_URl = 'https://os-management.onrender.com/api/customer'; 
+const API_URL = 'https://os-management.onrender.com/customers';
+const API_URl = 'https://os-management.onrender.com/customer'; 
+const API_URl_VERIFY = 'https://os-management.onrender.com/customers/verify';
 
 export const getCustomers = (page, limit, sortField = "", sortOrder = "", searchTerm = "") => {
   return axios.get(`${API_URL}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}${searchTerm ? `&search=${searchTerm}` : ""}`);
@@ -13,8 +51,6 @@ export const createCustomer = (customerData) => {
   });
 };
 
-
-
 export const updateCustomer = (customerId, customerData) => {
   return axios.put(`${API_URL}/${customerId}`, customerData);
 };
@@ -25,4 +61,13 @@ export const deleteCustomer = (customerId) => {
 
 export const searchCustomers = (searchTerm) => {
   return axios.get(`${API_URL}?search=${searchTerm}`);
+};
+
+export const checkExistingRecords = async (email, phone, gstn) => {
+  const response = await axios.get(`${API_URl_VERIFY}?email=${email}&phone=${phone}&gstn=${gstn}`);
+  return {
+    email: response.data.email ? true : false,
+    phone: response.data.phone ? true : false,
+    gstn: response.data.gstn ? true : false,
+  };
 };

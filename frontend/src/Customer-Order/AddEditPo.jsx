@@ -20,7 +20,7 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
     const loadItems = async () => {
       try {
         const { data } = await axios.get(
-          "https://os-management.onrender.com/api/items"
+          "https://os-management.onrender.com/items"
         );
         if (Array.isArray(data.items)) {
           setItems(data.items);
@@ -72,6 +72,44 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
     console.log("Current CPO ID in AddEditPo:", currentCpoId);
   }, [currentCpoId]);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("item", item);
+  //     formData.append("qty", qty);
+  //     formData.append("cost", cost);
+  //     formData.append("tax", tax);
+  //     formData.append("salesPrice", salesPrice);
+  //     formData.append("customerPo", currentCpoId);
+      
+  //     console.log("FormData: ",formData)
+
+  //     const response = await axios.post(
+  //       "https://os-management.onrender.com/itempo",
+  //       formData,
+  //       {
+  //         headers: { "Content-Type": "multipart/form-data" },
+  //       }
+  //     );
+
+  //     console.log("Response from server:", response.data);
+
+  //     if (response.status === 201 ) {
+  //       toast.success(response.data.message || "Item added successfully!");
+  //       refreshData();
+  //       onAddItem(response.data);
+  //       closeAddForm();
+  //     } else {
+  //       toast.error(response.data.error || "Unexpected error occurred.");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error:", err.message);
+  //     toast.error("ERROR: Failed to add item due server  error.");
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -87,7 +125,7 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
       console.log("FormData: ",formData)
 
       const response = await axios.post(
-        "https://os-management.onrender.com/api/itempo",
+        "https://os-management.onrender.com/itempo",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -96,19 +134,20 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
 
       console.log("Response from server:", response.data);
 
-      if (response.status === 201 ) {
+      if (response.status === 201) {
         toast.success(response.data.message || "Item added successfully!");
         refreshData();
-        onAddItem(response.data);
-        closeAddForm();
+        onAddItem(response.data);      
       } else {
         toast.error(response.data.error || "Unexpected error occurred.");
       }
     } catch (err) {
       console.error("Error:", err.message);
-      toast.error("ERROR: Failed to add item due server  error.");
+      toast.error("ERROR: Failed to add item due to server error.");
+      
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="salesorder-form">

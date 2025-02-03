@@ -21,6 +21,7 @@ function ManageCustomer() {
 
 
 
+
   const loadCustomers = async (page, sortField = "", sortOrder = "") => {
     try {
       const { data } = await getCustomers(page, 10, sortField, sortOrder, searchTerm);
@@ -95,6 +96,8 @@ function ManageCustomer() {
   useEffect(() => {
     loadCustomers(currentPage);
   }, [currentPage, sortField, sortOrder]);
+
+  
 
   return (
     <>
@@ -171,6 +174,9 @@ function ManageCustomer() {
                           description="Are you sure to delete this customer?"
                           onConfirm={() => handleDelete(customer._id)}
                           okText="Delete"
+                          okButtonProps={{
+                            style: { backgroundColor: "red", color: "white", border: "none" },
+                          }}
                         >
                           <button className="btns2">
                             <MdDelete  className="icon-size"/>
@@ -198,7 +204,12 @@ function ManageCustomer() {
           onCancel={() => setVisible(false)}
           footer={null}
         >
-          <AddCustomer editingCustomer={editingCustomers} setVisible={setVisible} loadCustomers={loadCustomers} />
+          <AddCustomer 
+            editingCustomer={editingCustomers} 
+            setVisible={setVisible} 
+            loadCustomers={loadCustomers} 
+            setEditingCustomers={setEditingCustomers} 
+          />
         </Modal>
       </div>
     </>

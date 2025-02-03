@@ -13,8 +13,8 @@ function Signin({ setIsLogin }) {
   const onSubmits = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("https://os-management.onrender.com/api/register", {
-        name, ////https://os-management.onrender.com
+      const { data } = await axios.post("https://os-management.onrender.com/register", {
+        name, ////http://localhost:8000
         email,
         password,
       });

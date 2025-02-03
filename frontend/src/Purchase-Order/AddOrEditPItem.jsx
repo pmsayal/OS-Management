@@ -63,7 +63,7 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
 
   const loadItems = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/api/items");
+      const { data } = await axios.get("https://os-management.onrender.com/items");
       if (Array.isArray(data.items)) {
         setItems(data.items);
       } else {
@@ -119,8 +119,8 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
       formData.append("invoiceDate", invoiceDate);
   
       const apiUrl = editpo
-        ? `https://os-management.onrender.com/api/itemppos/${editpo._id}`
-        : "https://os-management.onrender.com/api/itemppo";
+        ? `https://os-management.onrender.com/itemppos/${editpo._id}`
+        : "https://os-management.onrender.com/itemppo";
   
       const method = editpo ? "put" : "post";
   

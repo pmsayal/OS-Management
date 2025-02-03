@@ -5,7 +5,7 @@ import { Select } from "antd";
 import "../StyleCSS/Customer.css";
 const { Option } = Select;
 
-function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
+function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingSuppliers }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
@@ -14,6 +14,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
   const [city, setCity] = useState("");
   const [gstn, setGstn] = useState("");
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false); //new
 
   useEffect(() => {
     if (editingSuppliers) {
@@ -43,6 +44,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); //new
     try {
       const supplierData = new FormData();
       supplierData.append("name", name);
@@ -56,7 +58,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
 
       if (editingSuppliers) {
         const { data } = await axios.put(
-          `https://os-management.onrender.com/api/suppliers/${editingSuppliers._id}`,
+          `https://os-management.onrender.com/suppliers/${editingSuppliers._id}`,
           supplierData
         );
         if (data?.error) {
@@ -65,10 +67,16 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
           toast.success(`"${data.name}" is updated`);
           loadSuppliers(1);
           setVisible(false);
+          setTimeout(() => {
+            toast.success(`"${data.name}" is updated`);
+            loadSuppliers(1);
+            setVisible(false);//new
+            setEditingSuppliers(null)
+          }, 3000); //new
         }
       } else {
         const { data } = await axios.post(
-          "https://os-management.onrender.com/api/supplier",
+          "https://os-management.onrender.com/supplier",
           supplierData
         );
         if (data?.error) {
@@ -77,11 +85,22 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
           toast.success(`"${data.name}" is added`);
           loadSuppliers(1);
           setVisible(false);
+          setTimeout(() => {
+            toast.success(`"${data.name}" is updated`);
+            loadSuppliers(1);
+            setVisible(false);//new
+            setEditingSuppliers(null)
+          }, 3000); //new
         }
       }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleCancel = () => {
+    resetForm();
+    setEditingSuppliers(null)
   };
 
   return (
@@ -94,7 +113,9 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
         </h3>
         <div className="customer-form">
           <label className="customer-form__label">
-            <span>Name: <span className="required-field">*</span></span>
+            <span>
+              Name: <span className="required-field">*</span>
+            </span>
             <input
               type="text"
               name="name"
@@ -105,7 +126,9 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
             />
           </label>
           <label className="customer-form__label">
-            <span>Email: <span className="required-field">*</span></span>
+            <span>
+              Email: <span className="required-field">*</span>
+            </span>
             <input
               type="email"
               name="email"
@@ -116,7 +139,9 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
             />
           </label>
           <label className="customer-form__label">
-            <span>Phone: <span className="required-field">*</span></span>
+            <span>
+              Phone: <span className="required-field">*</span>
+            </span>
             <input
               type="tel"
               name="phone"
@@ -138,7 +163,9 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
             />
           </label>
           <label className="customer-form__label">
-            <span>Area: <span className="required-field">*</span></span>
+            <span>
+              Area: <span className="required-field">*</span>
+            </span>
             <input
               type="text"
               name="area"
@@ -158,7 +185,9 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
             />
           </label>
           <label className="customer-form__label">
-            <span>Status: <span className="required-field">*</span></span>
+            <span>
+              Status: <span className="required-field">*</span>
+            </span>
             <Select
               variant="false"
               className="form-select mb-3"
@@ -172,7 +201,9 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
             </Select>
           </label>
           <label className="customer-form__label">
-            <span>GSTN: <span className="required-field">*</span></span>
+            <span>
+              GSTN: <span className="required-field">*</span>
+            </span>
             <input
               type="text"
               name="gstn"
@@ -188,17 +219,22 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers }) {
         </div>
         <div className="ButtonContainer1">
           <button type="submit" className="StyledButton1">
-            Save
+            {loading ? "" : editingSuppliers ? "Update" : "Add"} 
           </button>
-          {/* <button
+          <button
             type="button"
             className="StyledButton11"
             onClick={handleCancel} 
           >
             Clear
-          </button> */}
+          </button>
         </div>
       </form>
+      {loading && (
+        <div className="processing-modal">
+          <img className="ProcessingIMG" src="./ProcessingGig.gif"></img>
+        </div>
+      )}
     </div>
   );
 }

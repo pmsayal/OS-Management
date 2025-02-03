@@ -10,7 +10,7 @@ import ManageCustomer from "./Customers/ManageCustomer";
 import ManageSuppliers from "./Suppliers/ManageSuppliers";
 import ManageItem from "./Item-Master/ManageItem";
 import ManagePurchase from "./Purchase-Order/ManagePurchase";
-import AddCustomer from "./AddCustomer";
+// import AddCustomer from "./AddCustomer";
 import GlobalStyle from "./GlobalStyled";
 import ItemPrice from "./Item-Master/ItemPrice";
 import { Toaster } from "react-hot-toast";
@@ -35,7 +35,7 @@ function App() {
           <Route path="items/itemsprice" element={<ItemPrice />} />
           <Route path="sales" element={<ManageCPO/>} />          
           <Route path="purchaseorder" element={<ManagePurchase />} />
-          <Route path="addcustomer" element={<AddCustomer />} />
+          {/* <Route path="addcustomer" element={<AddCustomer />} /> */}
         </Route>
         </Routes>
       </BrowserRouter>

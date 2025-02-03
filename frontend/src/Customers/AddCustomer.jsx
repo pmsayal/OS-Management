@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import "../StyleCSS/Customer.css";  
 
-function AddCustomer({ editingCustomer, setVisible, loadCustomers }) {
+function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCustomers }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
@@ -13,6 +13,7 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers }) {
   const [city, setCity] = useState("");
   const [gstn, setGstn] = useState("");
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false); //new
 
   const navigate = useNavigate();
 
@@ -45,6 +46,9 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);//new
+    
+
     try {
       const customerData = new FormData();
       customerData.append("name", name);
@@ -58,43 +62,47 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers }) {
   
       for (const [key, value] of customerData.entries()) {
         console.log(`${key}: ${value}`);
-      }
-  
+      }  
       let res;
       if (editingCustomer && editingCustomer._id) {
         res = await updateCustomer(editingCustomer._id, customerData);
       } else {
         res = await createCustomer(customerData);
-      }
-  
-      console.log("API Response:", res); // Log the API response
-  
+      }  
+      // console.log("API Response:", res);   
       const { data } = res;
       if (data?.error) {
         toast.error(data.error);
       } else {
-        toast.success(
-          editingCustomer && editingCustomer._id
-            ? `${data.name} is updated`
-            : `${data.name} is created`
-        );
-        loadCustomers();
+        setTimeout(() => {
+          toast.success(
+            editingCustomer && editingCustomer._id
+              ? `${data.name} is updated`
+              : `${data.name} is created`
+          );
+          loadCustomers();
+          setVisible(false);//new
+          setEditingCustomers(null); 
+        }, 3000);//new
       }
     } catch (err) {
       console.log("Error saving customer:", err);
       toast.error("Error saving customer");
     }
     setVisible(false);
+    setLoading(false);
   };
 
   const handleCancel = () => {
     resetForm();
+    setEditingCustomers(null); 
   };
+
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h3 className="form-heading">
+        <h3 className="form-heading" >
           {editingCustomer && editingCustomer._id ? "Edit Customer" : "Add Customer"}
         </h3>
         <div className="customer-form">
@@ -195,7 +203,7 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers }) {
         </div>
         <div className="ButtonContainer1">
           <button type="submit" className="StyledButton1">
-            Save
+            {loading ? "" : editingCustomer ? "Update" : "Add"} 
           </button>
           <button
             type="button"
@@ -206,8 +214,17 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers }) {
           </button>
         </div>
       </form>
+      {/* new */}
+      {loading && (
+        <div className="processing-modal">
+          <img className="ProcessingIMG" src="./ProcessingGig.gif"></img>
+        </div>
+      )}
     </div>
   );
 }
 
 export default AddCustomer;
+
+
+

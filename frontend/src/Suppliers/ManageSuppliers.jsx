@@ -32,7 +32,7 @@ function ManageSupplier() {
 
   const loadSuppliers = async (page, sortField = "", sortOrder = "") => {
     try {
-      const query = `https://os-management.onrender.com/api/suppliers?search=${searchTerm}&page=${page}&limit=10&sortField=${sortField}&sortOrder=${sortOrder}&_=${new Date().getTime()}`;
+      const query = `https://os-management.onrender.com/suppliers?search=${searchTerm}&page=${page}&limit=10&sortField=${sortField}&sortOrder=${sortOrder}&_=${new Date().getTime()}`;
       const { data } = await getSuppliers(page, 10, sortField, sortOrder, searchTerm);
       setSuppliers(data.suppliers);
       setTotalPages(data.totalPages);
@@ -202,6 +202,7 @@ function ManageSupplier() {
             editingSuppliers={editingSuppliers}
             setVisible={setVisible}
             loadSuppliers={loadSuppliers}
+            setEditingSuppliers={setEditingSuppliers}
           />
         </Modal>
       </div>

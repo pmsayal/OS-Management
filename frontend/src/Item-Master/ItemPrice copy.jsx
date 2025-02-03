@@ -41,7 +41,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const loadItemsprice = async (selectedItem, pageNumber) => {
     try {
       const { data } = await axios.get(
-        `https://os-management.onrender.com/api/itemprices?item=${selectedItem.item}&page=${pageNumber}&sortField=${sortField}&sortOrder=${sortOrder}`
+        `https://os-management.onrender.com/itemprices?item=${selectedItem.item}&page=${pageNumber}&sortField=${sortField}&sortOrder=${sortOrder}`
       );
       // console.log("Fetched item prices:", data);
 
@@ -60,13 +60,13 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
       let response;
       if (editprice) {
         response = await axios.put(
-          `https://os-management.onrender.com/api/itemprices/${editprice._id}`,
+          `https://os-management.onrender.com/itemprices/${editprice._id}`,
           formData,
           {headers: { "Content-Type": "multipart/form-data" }}
         );
       } else {
         response = await axios.post(
-          "https://os-management.onrender.com/api/itemprice",
+          "https://os-management.onrender.com/itemprice",
           { ...formData, item: selectedItem.item },
           {headers: { "Content-Type": "multipart/form-data" }}
         );
@@ -87,7 +87,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
         const totalQty = itemprice.reduce((total, price) => total + Number(price.qty), 0);
         onUpdateStock(totalQty);
 
-        await axios.put(`https://os-management.onrender.com/api/items/${selectedItem._id}`, {
+        await axios.put(`https://os-management.onrender.com/items/${selectedItem._id}`, {
           stock: totalQty, 
         });
       }
@@ -121,7 +121,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com/api/itemprices/${id}`
+        `https://os-management.onrender.com/itemprices/${id}`
       );
 
       if (data?.error) {
