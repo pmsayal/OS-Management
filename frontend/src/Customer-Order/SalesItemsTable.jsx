@@ -1,4 +1,3 @@
-// SalesItem.js
 import React, { useEffect, useState } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { Tooltip } from "antd";
@@ -35,28 +34,12 @@ const HeadTr = styled(Tr)`
   color: black;
 `;
 
-const SalesItem = ({ currentCpoId,  }) => {
-  const [salesItems, setSalesItems] = useState([]);
-  const [totalCustomerPOLocal, setTotalCustomerPOLocal] = useState(0);
+const SalesItem = ({ currentCpoId, salesItems }) => {
+  const [ totalCustomerPOLocal, setTotalCustomerPOLocal] = useState(0);
 
   useEffect(() => {
-    if (currentCpoId) {
-      loadSalesItems();
-    }
-  }, [currentCpoId]);
-
-  const loadSalesItems = async () => {
-    try {
-      const { data } = await axios.get(
-        `https://os-management.onrender.com/itempos?customerPo=${currentCpoId}`
-      );
-      setSalesItems(data);
-      calculateTotalPrice(data);
-    } catch (err) {
-      console.error("Error loading sales items:", err);
-      toast.error("Failed to load sales items");
-    }
-  };
+    calculateTotalPrice(salesItems);
+  }, [salesItems]);
 
   const calculateTotalPrice = (items) => {
     const total = items.reduce((sum, item) => {
@@ -81,7 +64,7 @@ const SalesItem = ({ currentCpoId,  }) => {
         toast.error(data.error);
       } else {
         toast.success(`${data.message}`);
-        loadSalesItems();
+        
       }
     } catch (err) {
       console.error("Error deleting item:", err);
@@ -135,7 +118,7 @@ const SalesItem = ({ currentCpoId,  }) => {
             ))
           ) : (
             <Tr>
-              <Td colSpan="6">No sales items available.</Td>
+              <Td colSpan="6">No items found</Td>
             </Tr>
           )}
         </tbody>

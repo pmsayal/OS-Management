@@ -26,6 +26,7 @@ function Home() {
         email,
         password,
       });
+      console.log(data)
   
       if (data?.error) {
         toast.error(data.error); 
@@ -104,6 +105,7 @@ function Home() {
                       name="email"
                       onChange={(e) => setEmail(e.target.value)}
                       value={email}
+                      required
                     />
                     <MdEmail className="icon" />
                   </div>
@@ -117,6 +119,7 @@ function Home() {
                       name="password"
                       onChange={(e) => setPassword(e.target.value)}
                       value={password}
+                      required
                     />
                     {showPassword ? (
                       <MdVisibilityOff

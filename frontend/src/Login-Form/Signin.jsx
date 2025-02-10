@@ -23,7 +23,8 @@ function Signin({ setIsLogin }) {
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
         toast.success("Register successful");
-        navigate("/dashboard");
+        // navigate("/dashboard");
+        navigate("/");
       }
     } catch (err) {
       toast.error("Email is Exist Registration failed. Try again.");
@@ -60,6 +61,7 @@ function Signin({ setIsLogin }) {
                   name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -71,6 +73,7 @@ function Signin({ setIsLogin }) {
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -82,6 +85,7 @@ function Signin({ setIsLogin }) {
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
             </div>

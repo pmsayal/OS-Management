@@ -1,10 +1,221 @@
+// import { useState, useEffect } from "react";
+// import {postCustomer, putCustomer} from '../services/customerApi';
+// import toast from "react-hot-toast";
+// import { useNavigate } from "react-router-dom";
+// import "../StyleCSS/Customer.css";  
+
+// function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCustomers, handleClose }) {
+//   const [name, setName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [area, setArea] = useState("");
+//   const [phone, setPhone] = useState("");
+//   const [address, setAddress] = useState("");
+//   const [city, setCity] = useState("");
+//   const [gstn, setGstn] = useState("");
+//   const [status, setStatus] = useState("");
+//   const [loading, setLoading] = useState(false); //new
+
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     if (editingCustomer) {
+//       setName(editingCustomer.name);
+//       setEmail(editingCustomer.email);
+//       setArea(editingCustomer.area);
+//       setPhone(editingCustomer.phone);
+//       setAddress(editingCustomer.address);
+//       setCity(editingCustomer.city);
+//       setGstn(editingCustomer.gstn);
+//       setStatus(editingCustomer.status);
+//     } else {
+//       // resetForm();
+//     }
+//   }, [editingCustomer]);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+
+//     try {
+//       const customerData = new FormData();
+//       customerData.append("name", name);
+//       customerData.append("email", email);
+//       customerData.append("phone", phone);
+//       customerData.append("area", area);
+//       customerData.append("address", address);
+//       customerData.append("city", city);
+//       customerData.append("gstn", gstn);
+//       customerData.append("status", status);
+  
+//       for (const [key, value] of customerData.entries()) {
+//         console.log(`${key}: ${value}`);
+//       }  
+//       let res;
+//       if (editingCustomer && editingCustomer._id) {
+//         res = await putCustomer(editingCustomer._id, customerData);
+//       } else {
+//         res = await postCustomer(customerData);
+//       }    
+//       const { data } = res;
+//       if (data?.error) {
+//         toast.error(data.error);
+//       } else {
+//         setTimeout(() => {
+//           toast.success(
+//             editingCustomer && editingCustomer._id
+//               ? `${data.name} is updated`
+//               : `${data.name} is created`
+//           );
+//           loadCustomers();
+//           // setVisible(false);
+//           // setEditingCustomers(null); 
+//           handleClose();
+//         }, 3000);
+//       }
+//     } catch (err) {
+//       console.log("Error saving customer:", err);
+//       toast.error("Error saving customer");
+//     }
+//     setVisible(false);
+//     setLoading(false);
+//   };
+
+
+//   return (
+//     <div>
+//       <form onSubmit={handleSubmit}>
+//         <h3 className="form-heading" >
+//           {editingCustomer && editingCustomer._id ? "Edit Customer" : "Add Customer"}
+//         </h3>
+//         <div className="customer-form">
+//           <label className="customer-form__label">
+//             <span>Customer Name: <span className="required-field">*</span></span>
+//             <input
+//               type="text"
+//               name="name"
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               className="customer-form__input"
+//               required
+//             />
+//           </label>
+//           <label className="customer-form__label">
+//             <span>Email: <span className="required-field">*</span></span>
+//             <input
+//               type="email"
+//               name="email"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               className="customer-form__input"
+//               required
+//             />
+//           </label>
+//           <label className="customer-form__label">
+//             <span>Phone: <span className="required-field">*</span></span>
+//             <input
+//               type="tel"
+//               name="phone"
+//               value={phone}
+//               onChange={(e) => setPhone(e.target.value)}
+//               className="customer-form__input"
+//               pattern="[0-9]{10}"
+//               maxLength="10"
+//               required
+//             />
+//           </label>
+//           <label className="customer-form__label">
+//             Address:
+//             <input
+//               type="text"
+//               name="address"
+//               value={address}
+//               onChange={(e) => setAddress(e.target.value)}
+//               className="customer-form__input"
+//             />
+//           </label>
+//           <label className="customer-form__label">
+//             <span>Area: <span className="required-field">*</span></span>
+//             <input
+//               type="text"
+//               name="area"
+//               value={area}
+//               onChange={(e) => setArea(e.target.value)}
+//               className="customer-form__input"
+//               required
+//             />
+//           </label>
+//           <label className="customer-form__label">
+//             City:
+//             <input
+//               type="text"
+//               name="city"
+//               value={city}
+//               onChange={(e) => setCity(e.target.value)}
+//               className="customer-form__input"
+//             />
+//           </label>
+//           <label className="customer-form__label">
+//             <span>Status: <span className="required-field">*</span></span>
+//             <select
+//               name="status"
+//               value={status}
+//               onChange={(e) => setStatus(e.target.value)}
+//               className="customer-form__input"
+//               required
+//             >
+//               <option value=""></option>
+//               <option value="active">active</option>
+//               <option value="inactive">inactive</option>
+//             </select>
+//           </label>
+//           <label className="customer-form__label">
+//              <span>GSTN:<span className="required-field"> *</span></span>
+//             <input
+//               type="text"
+//               name="gstn"
+//               value={gstn}
+//               onChange={(e) => setGstn(e.target.value)}
+//               className="customer-form__input"
+//               required
+//               pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$"
+//               maxLength="15"
+//               title="Please enter a valid 15-character GSTIN (e.g., 22AAAAA0000A1Z5)"
+//             />
+//           </label>
+//         </div>
+//         <div className="ButtonContainer1">
+//           <button type="submit" className="StyledButton1">
+//             {loading ? "" : editingCustomer ? "Update" : "Add"} 
+//           </button>
+//           <button
+//             type="button"
+//             className="StyledButton11"
+//             onClick={handleClose}
+//           >
+//             Cancel
+//           </button>
+//         </div>
+//       </form>
+//       {/* new */}
+//       {loading && (
+//         <div className="processing-modal">
+//           <img className="ProcessingIMG" src="./ProcessingGig.gif"></img>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default AddCustomer;
+
+
 import { useState, useEffect } from "react";
-import { createCustomer, updateCustomer } from '../services/customerApi';
+import { postCustomer, putCustomer } from '../services/customerApi';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import "../StyleCSS/Customer.css";  
 
-function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCustomers }) {
+function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCustomers, handleClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
@@ -13,7 +224,7 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
   const [city, setCity] = useState("");
   const [gstn, setGstn] = useState("");
   const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false); //new
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -43,11 +254,9 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
     setStatus("");
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);//new
-    
+    setLoading(true);
 
     try {
       const customerData = new FormData();
@@ -60,16 +269,12 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
       customerData.append("gstn", gstn);
       customerData.append("status", status);
   
-      for (const [key, value] of customerData.entries()) {
-        console.log(`${key}: ${value}`);
-      }  
       let res;
       if (editingCustomer && editingCustomer._id) {
-        res = await updateCustomer(editingCustomer._id, customerData);
+        res = await putCustomer(editingCustomer._id, customerData);
       } else {
-        res = await createCustomer(customerData);
-      }  
-      // console.log("API Response:", res);   
+        res = await postCustomer(customerData);
+      }    
       const { data } = res;
       if (data?.error) {
         toast.error(data.error);
@@ -81,28 +286,20 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
               : `${data.name} is created`
           );
           loadCustomers();
-          setVisible(false);//new
-          setEditingCustomers(null); 
-        }, 3000);//new
+          handleClose(); 
+        }, 3000);
       }
     } catch (err) {
       console.log("Error saving customer:", err);
       toast.error("Error saving customer");
     }
-    setVisible(false);
     setLoading(false);
   };
-
-  const handleCancel = () => {
-    resetForm();
-    setEditingCustomers(null); 
-  };
-
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h3 className="form-heading" >
+        <h3 className="form-heading">
           {editingCustomer && editingCustomer._id ? "Edit Customer" : "Add Customer"}
         </h3>
         <div className="customer-form">
@@ -187,7 +384,7 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
             </select>
           </label>
           <label className="customer-form__label">
-             <span>GSTN:<span className="required-field"> *</span></span>
+            <span>GSTN:<span className="required-field"> *</span></span>
             <input
               type="text"
               name="gstn"
@@ -208,16 +405,18 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
           <button
             type="button"
             className="StyledButton11"
-            onClick={handleCancel}
+            onClick={() => {
+              handleClose();
+              resetForm(); 
+            }}
           >
-            Clear
+            Cancel
           </button>
         </div>
       </form>
-      {/* new */}
       {loading && (
         <div className="processing-modal">
-          <img className="ProcessingIMG" src="./ProcessingGig.gif"></img>
+          <img className="ProcessingIMG" src="./ProcessingGig.gif" alt="Processing" />
         </div>
       )}
     </div>
@@ -225,6 +424,3 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
 }
 
 export default AddCustomer;
-
-
-

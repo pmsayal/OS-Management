@@ -5,7 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { Modal, Pagination, Popconfirm, Tooltip } from "antd";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
-import { getCustomers,  deleteCustomer, searchCustomers } from '../services/customerApi';
+import { getCustomers,  deleteCustomer, searchCustomers,  } from '../services/customerApi';
 
 function ManageCustomer() {
   const [customers, setCustomers] = useState([]);
@@ -96,6 +96,11 @@ function ManageCustomer() {
   useEffect(() => {
     loadCustomers(currentPage);
   }, [currentPage, sortField, sortOrder]);
+
+  const handleClose = () => {
+    setVisible(false);
+    setEditingCustomers(null); 
+  };
 
   
 
@@ -209,6 +214,7 @@ function ManageCustomer() {
             setVisible={setVisible} 
             loadCustomers={loadCustomers} 
             setEditingCustomers={setEditingCustomers} 
+            handleClose={handleClose} 
           />
         </Modal>
       </div>

@@ -194,8 +194,14 @@ table tbody tr.TD-SIZE td {
 }
 
 
-.highlighted {
-  border: 2px solid red; 
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+.error {
+  border: 1px solid red;
 }
 
 

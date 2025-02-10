@@ -31,7 +31,7 @@ function ManageCPO() {
   const loadCpoList = async () => {
     try {
       const { data } = await axios.get("https://os-management.onrender.com/customerpos");
-      setCustomer(data.customers || []); // Ensure it is always an array
+      setCustomer(data.customers || []); 
     } catch (err) {
       console.error("Error loading customers:", err);
     }
@@ -97,7 +97,6 @@ function ManageCPO() {
         <div className="StyledDiv">
           <div className="ButtonContainer">
             <div className="Dropdown-item">
-              {/* Customer Dropdown with safe handling */}
               <Select
                 name="customern"
                 value={
@@ -147,7 +146,10 @@ function ManageCPO() {
                 <BiSearch className="SearchIcon" />
                 Search
               </button>
-              <button className="StyledButton" onClick={() => setVisible(true)}>
+              <button className="StyledButton" onClick={() => {
+                setVisible(true);
+                setEditingCpo(null); // Reset editing state for adding
+              }}>
                 <BiAddToQueue className="Add" />
                 Add CPO
               </button>
@@ -221,7 +223,10 @@ function ManageCPO() {
       </div>
       <Modal
         visible={visible}
-        onCancel={() => setVisible(false)}
+        onCancel={() => {
+          setVisible(false);
+          setEditingCpo(null); 
+        }}
         footer={null}
         width={750}
       >
@@ -229,6 +234,7 @@ function ManageCPO() {
           setVisible={setVisible}
           editingCpo={editingCpo}
           refreshData={loadCpo}
+          refreshCustomers={loadCpoList}
         />
       </Modal>
     </>
@@ -236,4 +242,3 @@ function ManageCPO() {
 }
 
 export default ManageCPO;
-

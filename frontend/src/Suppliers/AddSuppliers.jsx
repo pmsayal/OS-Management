@@ -5,7 +5,7 @@ import { Select } from "antd";
 import "../StyleCSS/Customer.css";
 const { Option } = Select;
 
-function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingSuppliers }) {
+function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingSuppliers, handleClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
@@ -72,6 +72,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
             loadSuppliers(1);
             setVisible(false);//new
             setEditingSuppliers(null)
+            handleClose()
           }, 3000); //new
         }
       } else {
@@ -90,6 +91,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
             loadSuppliers(1);
             setVisible(false);//new
             setEditingSuppliers(null)
+            handleClose()
           }, 3000); //new
         }
       }
@@ -224,9 +226,13 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
           <button
             type="button"
             className="StyledButton11"
-            onClick={handleCancel} 
+            // onClick={handleCancel} 
+            onClick={() => {
+              handleClose();
+              resetForm(); 
+            }}
           >
-            Clear
+            Cancel
           </button>
         </div>
       </form>

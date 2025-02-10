@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 
-const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
+const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
   const [items, setItems] = useState([]);
   const [item, setItem] = useState("");
   const [qty, setQty] = useState("");
@@ -11,17 +11,13 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
   const [tax, setTax] = useState("");
   const [salesPrice, setSalesPrice] = useState("");
 
-  //add New State
   const [availableQty, setAvailableQty] = useState(0);
-  const [allocatedQty, setAllocatedQty] = useState(0);
   const [remainingQty, setRemainingQty] = useState(0);
 
   useEffect(() => {
     const loadItems = async () => {
       try {
-        const { data } = await axios.get(
-          "https://os-management.onrender.com/items"
-        );
+        const { data } = await axios.get("https://os-management.onrender.com/items");
         if (Array.isArray(data.items)) {
           setItems(data.items);
         } else {
@@ -42,7 +38,6 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
     if (selectedItem) {
       const stock = selectedItem.stock;
       setAvailableQty(stock);
-      setAllocatedQty(0);
       setRemainingQty(stock);
     } else {
       console.log("Selected item not found");
@@ -52,7 +47,7 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
   useEffect(() => {
     if (qty !== "") {
       const remainingQty = availableQty - parseInt(qty);
-      setRemainingQty(remainingQty >= 0 ? remainingQty : 0);
+      setRemainingQty(remainingQty >= 0 ? remainingQty : 0 )      
     } else {
       setRemainingQty(availableQty);
     }
@@ -68,51 +63,9 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
     setSalesPrice(finalPrice.toFixed(2));
   }, [qty, cost, tax]);
 
-  useEffect(() => {
-    console.log("Current CPO ID in AddEditPo:", currentCpoId);
-  }, [currentCpoId]);
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("item", item);
-  //     formData.append("qty", qty);
-  //     formData.append("cost", cost);
-  //     formData.append("tax", tax);
-  //     formData.append("salesPrice", salesPrice);
-  //     formData.append("customerPo", currentCpoId);
-      
-  //     console.log("FormData: ",formData)
-
-  //     const response = await axios.post(
-  //       "https://os-management.onrender.com/itempo",
-  //       formData,
-  //       {
-  //         headers: { "Content-Type": "multipart/form-data" },
-  //       }
-  //     );
-
-  //     console.log("Response from server:", response.data);
-
-  //     if (response.status === 201 ) {
-  //       toast.success(response.data.message || "Item added successfully!");
-  //       refreshData();
-  //       onAddItem(response.data);
-  //       closeAddForm();
-  //     } else {
-  //       toast.error(response.data.error || "Unexpected error occurred.");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error:", err.message);
-  //     toast.error("ERROR: Failed to add item due server  error.");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const formData = new FormData();
       formData.append("item", item);
@@ -120,10 +73,8 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
       formData.append("cost", cost);
       formData.append("tax", tax);
       formData.append("salesPrice", salesPrice);
-      formData.append("customerPo", currentCpoId);
-      
-      console.log("FormData: ",formData)
-
+      formData.append("customerPo", currentCpoId);   
+  
       const response = await axios.post(
         "https://os-management.onrender.com/itempo",
         formData,
@@ -131,20 +82,18 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
-      console.log("Response from server:", response.data);
-
       if (response.status === 201) {
         toast.success(response.data.message || "Item added successfully!");
-        refreshData();
-        onAddItem(response.data);      
+        refreshData(); 
+        closeAddForm(); 
       } else {
         toast.error(response.data.error || "Unexpected error occurred.");
       }
     } catch (err) {
-      console.error("Error:", err.message);
-      toast.error("ERROR: Failed to add item due to server error.");
-      
+      if (err.response && err.response.status !== 201) {
+        console.error("Error:", err.message);
+        toast.error("ERROR: Failed to add item due to server error.");      
+      }
     }
   };
 
@@ -173,8 +122,8 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
           </select>
         </label>
 
-        <label htmlFor="qty" className="customer-form__label">
-          Availble Qty:
+        <label htmlFor="availableQty" className="customer-form__label">
+          Available Qty:
         </label>
         <input
           type="number"
@@ -198,7 +147,7 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
           />
         </label>
 
-        <label htmlFor="qty" className="customer-form__label">
+        <label htmlFor="remainingQty" className="customer-form__label">
           Remaining Qty:
         </label>
         <input
@@ -244,27 +193,18 @@ const AddEditPo = ({ refreshData, onAddItem, currentCpoId, closeAddForm }) => {
             type="text"
             id="salesprice"
             value={salesPrice}
-            onChange={(e) => setSalesPrice(e.target.value)}
             className="customer-form__input"
+            readOnly
           />
         </label>
       </div>
 
       <div className="ButtonContainer1">
+
         <button type="submit" className="StyledButton1">
           Save
         </button>
-        <button
-          type="button"
-          className="StyledButton11"
-          onClick={() => {
-            setItem("");
-            setQty("");
-            setCost("");
-            setTax("");
-            setSalesPrice("");
-          }}
-        >
+        <button type="button" className="StyledButton11" onClick={closeAddForm}>
           Cancel
         </button>
       </div>

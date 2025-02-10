@@ -72,6 +72,12 @@ function ManageSupplier() {
     loadSuppliers(currentPage, field, order);
   };
 
+  const handleClose = () => {
+    setVisible(false);
+    setEditingSuppliers(null); 
+  };
+
+
   return (
     <>
       <div className="main-container">
@@ -203,6 +209,7 @@ function ManageSupplier() {
             setVisible={setVisible}
             loadSuppliers={loadSuppliers}
             setEditingSuppliers={setEditingSuppliers}
+            handleClose={handleClose}
           />
         </Modal>
       </div>

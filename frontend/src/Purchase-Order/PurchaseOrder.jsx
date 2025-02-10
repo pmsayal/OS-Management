@@ -13,6 +13,8 @@ const PurchaseOrder = ({
   customerpO,
   setVisible,
   onSuccess,
+  setIsEditing,
+  setPurchaseE
 }) => {
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState("");
@@ -28,14 +30,22 @@ const PurchaseOrder = ({
 
   useEffect(() => {
     if (purchaseEditing && purchaseEditing._id) {
-      const customerData = customers.find(c => c._id === purchaseEditing.customer._id);
+      const customerData = customers.find(
+        (c) => c._id === purchaseEditing.customer._id
+      );
       setCustomer(customerData ? customerData._id : "");
       setCustomerpo(purchaseEditing.customerpo || customerpO);
       setPurchase(purchaseEditing.purchase);
-      setDate(purchaseEditing.date ? new Date(purchaseEditing.date).toISOString().split('T')[0] : "");
+      setDate(
+        purchaseEditing.date
+          ? new Date(purchaseEditing.date).toISOString().split("T")[0]
+          : ""
+      );
       setStatus(purchaseEditing.status);
       setPurchaseItems(purchaseEditing.items || []);
-      const filtered = customerPOs.filter(po => po.customern._id === (customerData ? customerData._id : ""));
+      const filtered = customerPOs.filter(
+        (po) => po.customern._id === (customerData ? customerData._id : "")
+      );
       setFilteredCPOs(filtered);
     } else {
       setCustomer("");
@@ -43,7 +53,7 @@ const PurchaseOrder = ({
       setDate("");
       setPurchase("");
       setStatus("");
-      setPurchaseItems([]);
+      setPurchaseItems();
     }
   }, [purchaseEditing, customers, customerpO]);
 
@@ -142,6 +152,20 @@ const PurchaseOrder = ({
       console.log(err);
     }
   };
+
+
+  const handleCancel = () => {
+    setCustomer("");
+    setCustomerpo("");
+    setDate("");
+    setPurchase("");
+    setStatus("");
+    setPurchaseItems([]);
+    setVisible(false);
+    setPurchaseE(null);
+    setIsEditing(false);
+  }
+
 
   const handleCustomerChange = (e) => {
     const selectedCustomerId = e.target.value;
@@ -258,13 +282,17 @@ const PurchaseOrder = ({
                 />
               </div>
               <div className="labelinputfield">
-                <button
-                  type="button"
-                  onClick={() => setShowAddOrEdit(true)}
-                  className="Add-P-Item"
-                >
-                  Add Purchase Item
-                </button>
+                {purchaseEditing ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowAddOrEdit(true)}
+                    className="Add-P-Item"
+                  >
+                    Add Purchase Item
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
@@ -283,8 +311,8 @@ const PurchaseOrder = ({
             <button type="submit" className="StyledButton1">
               {isEditing ? "Update" : "Save"}
             </button>
-            <button type="button" className="StyledButton11">
-              Clear
+            <button type="button" className="StyledButton11" onClick={handleCancel}>
+              Cancel
             </button>
           </div>
         </form>
@@ -294,3 +322,4 @@ const PurchaseOrder = ({
 };
 
 export default PurchaseOrder;
+

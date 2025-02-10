@@ -190,6 +190,10 @@ function ManagePurchase() {
     loadPurchase(currentPage); 
   };
 
+  const closeAddForm = () => {
+    
+  }
+
 
 
   return (
@@ -315,7 +319,7 @@ function ManagePurchase() {
                             backgroundColor: "rgb(41, 10, 244)",
                             color: "white",
                             borderRadius: "10%",
-                          }}
+                          }} 
                         >
                           <button
                             onClick={() => handleEditPurchase(purchase)}
@@ -362,9 +366,10 @@ function ManagePurchase() {
             associatedItems={associatedItems}
             customerpO={selectedCPO}
             handleAddPurchaseItem={handleAddPurchaseItem}
-            // updatePurchaseTotal={updatePurchaseTotal}
             setVisible={setVisible}
             onSuccess={refreshPurchaseData}
+            setPurchaseE={setPurchaseE} 
+            setIsEditing={setIsEditing} 
           />
         </Modal>
         <Pagination
@@ -372,7 +377,8 @@ function ManagePurchase() {
           total={totalPages * pageSize}
           pageSize={pageSize}
           onChange={onPageChange}
-          showSizeChanger={false}          
+          showSizeChanger={false}    
+          // setIsEditing={setIsEditing}      
         />
       </div>
     </>

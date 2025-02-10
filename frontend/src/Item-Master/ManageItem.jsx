@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddItem from "./AddItem";
 import ItemStockUtilization from "./ItemStockUtilization";
 import ItemPrice from "./ItemPrice";
-import {
-  BiInfoCircle,
-  BiAddToQueue,
-  BiPackage,
-  BiSearch,
-  BiSolidEdit,
-} from "react-icons/bi";
+import {BiInfoCircle,BiAddToQueue,BiPackage,BiSearch,BiSolidEdit,} from "react-icons/bi";
 import Select from "react-select";
 import { MdDelete } from "react-icons/md";
 import { Modal, Pagination, Tooltip } from "antd";
@@ -32,9 +26,7 @@ function ManageItem() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [itemsPrice, setItemsPrice] = useState([]);
   const [totalStockQuantity, setTotalStockQuantity] = useState(0);
-  console.log("filteredItems",filteredItems)
 
-  // console.log(totalStockQuantity)
   const itemsPerPage = 10;
 
   const handleSearch = (selectedOption) => {
@@ -81,22 +73,18 @@ function ManageItem() {
     let allSuppliers = [];
     let currentPage = 1;
     let hasMore = true;
-
     while (hasMore) {
       const supplierResponse = await axios.get(
         `https://os-management.onrender.com/suppliers?page=${currentPage}&limit=10`
       );
       const suppliers = supplierResponse.data.suppliers;
-
       allSuppliers = [...allSuppliers, ...suppliers];
-
       if (suppliers.length < 10) {
         hasMore = false;
       } else {
         currentPage++;
       }
     }
-
     return allSuppliers;
   };
 
@@ -104,22 +92,18 @@ function ManageItem() {
     let allItems = [];
     let currentPage = 1;
     let hasMore = true;
-
     while (hasMore) {
       const itemResponse = await axios.get(
         `https://os-management.onrender.com/items?page=${currentPage}&limit=10`
       );
       const items = itemResponse.data.items;
-
       allItems = [...allItems, ...items];
-
       if (items.length < 10) {
         hasMore = false;
       } else {
         currentPage++;
       }
     }
-
     return allItems;
   };
 
@@ -155,6 +139,7 @@ function ManageItem() {
       setFilteredItems(items);
     }
   };
+  
 
   const loadSupplier = async () => {
     try {
@@ -214,7 +199,6 @@ function ManageItem() {
       const { data } = await axios.delete(
         `https://os-management.onrender.com/items/${itemId}`
       );
-      console.log(data);
       if (data?.error) {
         toast.error(data.error);
       } else {
@@ -230,17 +214,16 @@ function ManageItem() {
     setSelectedItem(item);
     setShowStock(true);
   };
+  
 
   const handleShowItemPrice = (item) => {
     setSelectedItem(item);
     setShowItem(true);
   };
-
   const sortItems = (field) => {
     const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
     setSortField(field);
     setSortOrder(order);
-
     const sortedItems = [...filteredItems].sort((a, b) => {
       if (a[field] < b[field]) return order === "asc" ? -1 : 1;
       if (a[field] > b[field]) return order === "asc" ? 1 : -1;
@@ -254,7 +237,7 @@ function ManageItem() {
     setTotalStockQuantity(newStockQuantity);
   };
 
-  console.log("item length",items.length)
+
 
   const saveStockToDatabase = async (itemsToSave) => {
     try {
@@ -275,14 +258,14 @@ function ManageItem() {
   };
   
 
+
   const loadItemstock = async (itemsToLoad) => {
     try {
       const itemStockRequests = itemsToLoad.map((item) =>
         axios.get(`https://os-management.onrender.com/itemprices?item=${item.item}`)
       );       
       const responses = await Promise.all(itemStockRequests);
-      const stockMap = {};  
-  
+      const stockMap = {};    
       responses.forEach((response) => {
         const itemPrices = response.data.items;
         itemPrices.forEach((item) => {
@@ -304,6 +287,7 @@ function ManageItem() {
       console.log("Error in loadItemstock: ", err);
     }
   };
+
 
   useEffect(() => {
     console.log("after update filteredIemss", filteredItems);
@@ -355,66 +339,31 @@ function ManageItem() {
           </div>
         </div>
         <div>
-          <h2 className="list-name">Item List:</h2>
+          <h2 className="list-name">Item List Tabel:</h2>
           <div>
             <table className="table table-bordered table-striped table-hover shadow">
               <thead className="table-secondary TH-SIZE">
                 <tr>
                   <th onClick={() => sortItems("item")}>
-                    Item Name{" "}
-                    {sortField === "item"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                    Item Name{" "}{sortField === "item"  ? sortOrder === "asc" ? "↑" : "↓" : "" }
                   </th>
                   <th onClick={() => sortItems("supplier.name")}>
-                    Supplier{" "}
-                    {sortField === "supplier.name"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                    Supplier{" "}{sortField === "supplier.name" ? sortOrder === "asc" ? "↑" : "↓" : ""}
                   </th>
                   <th onClick={() => sortItems("category")}>
-                    Category{" "}
-                    {sortField === "category"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                    Category{" "}{sortField === "category" ? sortOrder === "asc" ? "↑" : "↓": ""}
                   </th>
-                  <th onClick={() => sortItems("brand")}>
-                    Brand{" "}
-                    {sortField === "brand"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                  <th onClick={() => sortItems("brand")} className="">  
+                    Brand{" "}{sortField === "brand" ? sortOrder === "asc" ? "↑" : "↓" : ""}
                   </th>
                   <th onClick={() => sortItems("stock")}>
-                    Stock{" "}
-                    {sortField === "stock"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                    Stock{" "}{sortField === "stock"? sortOrder === "asc" ? "↑" : "↓" : ""}
                   </th>
                   <th onClick={() => sortItems("unit")}>
-                    Unit{" "}
-                    {sortField === "unit"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                    Unit{" "}{sortField === "unit" ? sortOrder === "asc" ? "↑" : "↓": ""}
                   </th>
                   <th onClick={() => sortItems("status")}>
-                    Status{" "}
-                    {sortField === "status"
-                      ? sortOrder === "asc"
-                        ? "↑"
-                        : "↓"
-                      : ""}
+                    Status{" "}{sortField === "status" ? sortOrder === "asc" ? "↑" : "↓" : ""}
                   </th>
                   <th>Action</th>
                 </tr>
@@ -480,9 +429,11 @@ function ManageItem() {
       </div>
       <Modal visible={visible} onCancel={() => setVisible(false)} footer={null} >
         <AddItem
-          item={editingItem}
+          // item={editingItem}
+          editingItem={editingItem}
           setVisible={setVisible}
           loadItems={loadItems}
+          setEditingItem={setEditingItem}
           items={items} 
           onClose={() => {
             setVisible(false);
@@ -511,6 +462,7 @@ function ManageItem() {
           item={selectedItem} 
           onClose={() => setShowItem(false)} 
           onUpdateStock={onUpdateStock}
+          loadItems={loadItems}
         />
       </Modal>
     </>
@@ -520,405 +472,3 @@ function ManageItem() {
 export default ManageItem;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import AddItem from "./AddItem";
-// import ItemStockUtilization from "./ItemStockUtilization";
-// import ItemPrice from "./ItemPrice";
-// import axios from "axios";
-// import {
-//   BiInfoCircle,
-//   BiAddToQueue,
-//   BiPackage,
-//   BiSearch,
-//   BiSolidEdit,
-// } from "react-icons/bi";
-// import Select from "react-select";
-// import { MdDelete } from "react-icons/md";
-// import { Modal, Pagination, Tooltip } from "antd";
-// import toast from "react-hot-toast";
-// import "../StyleCSS/Customer.css";
-// import { getItems, getSuppliers, deleteItem, searchItems } from "../services/itemApi"; // Import new API functions
-
-// function ManageItem() {
-//   const [items, setItems] = useState([]);
-//   const [filteredItems, setFilteredItems] = useState([]);
-//   const [visible, setVisible] = useState(false);
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [supplier, setSupplier] = useState([]);
-//   const [showStock, setShowStock] = useState(false);
-//   const [showItem, setShowItem] = useState(false);
-//   const [editingItem, setEditingItem] = useState(null);
-//   const [selectedItem, setSelectedItem] = useState(null);
-//   const [totalItems, setTotalItems] = useState(0);
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [sortField, setSortField] = useState("item");
-//   const [sortOrder, setSortOrder] = useState("asc");
-//   const [itemsPrice, setItemsPrice] = useState([]);
-//   const [totalStockQuantity, setTotalStockQuantity] = useState(0);
-//   console.log("filteredItems", filteredItems);
-
-//   const itemsPerPage = 10;
-
-//   // Search Handler for Item Name
-//   const handleSearch = (selectedOption) => {
-//     if (selectedOption) {
-//       const filtered = items.filter(
-//         (item) => item.item.toLowerCase() === selectedOption.label.toLowerCase()
-//       );
-//       setFilteredItems(filtered);
-//       setSearchTerm(selectedOption.label);
-//     } else {
-//       setFilteredItems(items);
-//     }
-//   };
-
-//   // Generic search handler
-//   const handleSearchItem = () => {
-//     if (searchTerm) {
-//       const filtered = items.filter((item) => {
-//         const matchesCategory = item.category
-//           .toLowerCase()
-//           .includes(searchTerm.toLowerCase());
-//         const matchesBrand = item.brand
-//           .toLowerCase()
-//           .includes(searchTerm.toLowerCase());
-//         return matchesCategory || matchesBrand;
-//       });
-//       setFilteredItems(filtered);
-//     } else {
-//       setFilteredItems(items);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (!searchTerm) {
-//       setFilteredItems(items);
-//     }
-//   }, [searchTerm, items]);
-
-//   useEffect(() => {
-//     loadSupplierAndItems();
-//     loadItemstock();
-//     saveStockToDatabase();
-//   }, []);
-
-//   const loadAllItems = async () => {
-//     try {
-//       const { data } = await getItems(currentPage, itemsPerPage);
-//       setItems(data.items);
-//       setFilteredItems(data.items);
-//       setTotalItems(data.totalItems);
-//     } catch (err) {
-//       console.log("Error loading items:", err);
-//     }
-//   };
-
-//   const loadSupplierAndItems = async () => {
-//     try {
-//       const suppliersData = await getSuppliers();
-//       setSupplier(suppliersData.suppliers);
-//       loadAllItems();
-//     } catch (err) {
-//       console.log("Error loading suppliers:", err);
-//     }
-//   };
-
-//   useEffect(() => {
-//     loadSupplierAndItems();
-//   }, [currentPage]);
-
-//   const onPageChange = (page) => {
-//     setCurrentPage(page);
-//     loadAllItems(page);
-//   };
-
-//   const itemOptions = items.map((item) => ({
-//     value: item._id,
-//     label: item.item,
-//   }));
-
-//   const handleEditItem = (item) => {
-//     setEditingItem(item);
-//     setVisible(true);
-//   };
-
-//   const handleDelete = async (itemId) => {
-//     try {
-//       const { data } = await deleteItem(itemId);
-//       if (data?.error) {
-//         toast.error(data.error);
-//       } else {
-//         toast.success(`${data.item.item} is deleted`);
-//         loadAllItems();
-//       }
-//     } catch (err) {
-//       console.log("Error deleting item:", err);
-//     }
-//   };
-
-//   const handleShowStock = (item) => {
-//     setSelectedItem(item);
-//     setShowStock(true);
-//   };
-
-//   const handleShowItemPrice = (item) => {
-//     setSelectedItem(item);
-//     setShowItem(true);
-//   };
-
-//   const sortItems = (field) => {
-//     const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
-//     setSortField(field);
-//     setSortOrder(order);
-
-//     const sortedItems = [...filteredItems].sort((a, b) => {
-//       if (a[field] < b[field]) return order === "asc" ? -1 : 1;
-//       if (a[field] > b[field]) return order === "asc" ? 1 : -1;
-//       return 0;
-//     });
-//     setFilteredItems(sortedItems);
-//   };
-
-//   const onUpdateStock = (newStockQuantity) => {
-//     setTotalStockQuantity(newStockQuantity);
-//   };
-
-//   const saveStockToDatabase = async () => {
-//     try {
-//       const saveRequests = items.map((item) => {
-//         const formData = new FormData();
-//         formData.append("item", item.item);
-//         formData.append("stock", item.stock);
-//         return axios.post("https://os-management.onrender.com/updateStock", formData, {
-//           headers: { "Content-Type": "multipart/form-data" },
-//         });
-//       });
-//       await Promise.all(saveRequests);
-//     } catch (err) {
-//       console.log("Error saving stock to database:", err);
-//     }
-//   };
-
-//   const loadItemstock = async () => {
-//     try {
-//       const itemStockRequests = items.map((item) =>
-//         axios.get(`https://os-management.onrender.com/itemprices?item=${item.item}`)
-//       );
-//       const responses = await Promise.all(itemStockRequests);
-//       const stockMap = {};
-
-//       responses.forEach((response) => {
-//         const itemPrices = response.data.items;
-//         itemPrices.forEach((item) => {
-//           const qty = parseInt(item.qty || 0, 10);
-//           if (stockMap[item.item]) {
-//             stockMap[item.item] += qty;
-//           } else {
-//             stockMap[item.item] = qty;
-//           }
-//         });
-//       });
-
-//       const updatedFilteredItems = items.map((item) => ({
-//         ...item,
-//         stock: stockMap[item.item] || 0,
-//       }));
-//       setFilteredItems(updatedFilteredItems);
-//       saveStockToDatabase();
-//     } catch (err) {
-//       console.log("Error in loadItemstock:", err);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <div className="main-container">
-//         <h1>Manage Items:</h1>
-//         <div className="StyledDiv">
-//           <div className="ButtonContainer">
-//             <div className="Dropdown-item">
-//               <Select
-//                 className="SearchbelDropdown"
-//                 options={itemOptions}
-//                 onChange={handleSearch}
-//                 placeholder="Item Name..."
-//               />
-//               <Select
-//                 className="SearchbelDropdown"
-//                 options={supplier.map((sup) => ({
-//                   value: sup._id,
-//                   label: sup.name,
-//                 }))}
-//                 onChange={handleSearch}
-//                 placeholder="Supplier Name..."
-//                 isClearable
-//               />
-//               <input
-//                 type="search"
-//                 className="searchitem"
-//                 placeholder="Search..."
-//                 onChange={(e) => setSearchTerm(e.target.value)}
-//               />
-//               <button className="StyledButton" onClick={handleSearchItem}>
-//                 <BiSearch className="SearchIcon" />
-//                 Search
-//               </button>
-//             </div>
-//             <div>
-//               <button className="StyledButton" onClick={() => setVisible(true)}>
-//                 <BiAddToQueue className="Add" />
-//                 Add Item
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//         <div>
-//           <h2 className="list-name">Item List:</h2>
-//           <div>
-//             <table className="table table-bordered table-striped table-hover shadow">
-//               <thead className="table-secondary">
-//                 <tr>
-//                   <th onClick={() => sortItems("item")}>
-//                     Item Name{" "}
-//                     {sortField === "item"
-//                       ? sortOrder === "asc"
-//                         ? "↑"
-//                         : "↓"
-//                       : ""}
-//                   </th>
-//                   <th onClick={() => sortItems("category")}>
-//                     Category{" "}
-//                     {sortField === "category"
-//                       ? sortOrder === "asc"
-//                         ? "↑"
-//                         : "↓"
-//                       : ""}
-//                   </th>
-//                   <th>Stock Quantity</th>
-//                   <th onClick={() => sortItems("brand")}>
-//                     Brand{" "}
-//                     {sortField === "brand"
-//                       ? sortOrder === "asc"
-//                         ? "↑"
-//                         : "↓"
-//                       : ""}
-//                   </th>
-//                   <th>Price</th>
-//                   <th>Action</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {filteredItems.map((item, index) => (
-//                   <tr key={index}>
-//                     <td>{item.item}</td>
-//                     <td>{item.category}</td>
-//                     <td>{item.stock}</td>
-//                     <td>{item.brand}</td>
-//                     <td>{item.price}</td>
-//                     <td>
-//                       <Tooltip title="Edit">
-//                         <button
-//                           onClick={() => handleEditItem(item)}
-//                           className="editbtn"
-//                         >
-//                           <BiSolidEdit />
-//                         </button>
-//                       </Tooltip>
-//                       <Tooltip title="Stock">
-//                         <button
-//                           onClick={() => handleShowStock(item)}
-//                           className="editbtn"
-//                         >
-//                           <BiPackage />
-//                         </button>
-//                       </Tooltip>
-//                       <Tooltip title="Item Price">
-//                         <button
-//                           onClick={() => handleShowItemPrice(item)}
-//                           className="editbtn"
-//                         >
-//                           <BiInfoCircle />
-//                         </button>
-//                       </Tooltip>
-//                       <Tooltip title="Delete">
-//                         <button
-//                           onClick={() => handleDelete(item._id)}
-//                           className="deletebtn"
-//                         >
-//                           <MdDelete />
-//                         </button>
-//                       </Tooltip>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//           <div className="pagination">
-//             <Pagination
-//               current={currentPage}
-//               total={totalItems}
-//               pageSize={itemsPerPage}
-//               onChange={onPageChange}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
-
-// export default ManageItem;

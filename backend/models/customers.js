@@ -18,7 +18,7 @@ const customerSchema = new mongoose.Schema(
       type: Number,
       required: true,
       unique: true,
-      trim: true,
+      // trim: true,
     },
     area: {
       type: String,
