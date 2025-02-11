@@ -21,7 +21,7 @@ function ForgotPassword() {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://os-management.onrender.com/forgot-password", {
+      const response = await fetch("https://os-management.onrender.com/api/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -45,7 +45,7 @@ function ForgotPassword() {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://os-management.onrender.com/verify-otp", {
+      const response = await fetch("https://os-management.onrender.com/api/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
@@ -75,7 +75,7 @@ function ForgotPassword() {
     }
 
     try {
-      const response = await fetch("https://os-management.onrender.com/reset-password", {
+      const response = await fetch("https://os-management.onrender.com/api/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, newPassword }),

@@ -49,7 +49,7 @@ const SalesOrder = ({
 
   const loadCustomer = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       if (Array.isArray(data.customers)) {
         setCustomers(data.customers);
       } else {
@@ -67,7 +67,7 @@ const SalesOrder = ({
 
   const loadSalesItemsForCPO = async (cpoId) => {
     if (cpoId) {
-      const { data } = await axios.get(`https://os-management.onrender.com/itempos?customerPo=${cpoId}`);
+      const { data } = await axios.get(`https://os-management.onrender.com/api/itempos?customerPo=${cpoId}`);
       setSalesItems(data); 
     }
   };
@@ -81,7 +81,7 @@ const SalesOrder = ({
       formData.append("status", status);
   
       await axios.post(
-        "https://os-management.onrender.com/customerpo",
+        "https://os-management.onrender.com/api/customerpo",
         formData,
         {
           headers: {
@@ -108,7 +108,7 @@ const SalesOrder = ({
       formData.append("status", status);
   
       await axios.put(
-        `https://os-management.onrender.com/customerpos/${editingCpo._id}`,
+        `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
         formData,
         {
           headers: {

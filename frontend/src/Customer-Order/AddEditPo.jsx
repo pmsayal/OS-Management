@@ -17,7 +17,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
   useEffect(() => {
     const loadItems = async () => {
       try {
-        const { data } = await axios.get("https://os-management.onrender.com/items");
+        const { data } = await axios.get("https://os-management.onrender.com/api/items");
         if (Array.isArray(data.items)) {
           setItems(data.items);
         } else {
@@ -76,7 +76,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
       formData.append("customerPo", currentCpoId);   
   
       const response = await axios.post(
-        "https://os-management.onrender.com/itempo",
+        "https://os-management.onrender.com/api/itempo",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

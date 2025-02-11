@@ -24,7 +24,7 @@ function Dashboard() {
 
   const loadCustomers = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       setCustomers(data.customers || []);
     } catch (err) {
       console.log(err);
@@ -33,7 +33,7 @@ function Dashboard() {
 
   const loadCPOs = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/customerpos");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customerpos");
       setCpoList(data.customers || []);
     } catch (err) {
       console.log("Error fetching CPOs:", err);
@@ -42,7 +42,7 @@ function Dashboard() {
 
   const loadCPoItem = async () => {
     try {
-      const { data } = await axios.get(`https://os-management.onrender.com/itempos`);
+      const { data } = await axios.get(`https://os-management.onrender.com/api/itempos`);
       setItemPos(data);
     } catch (err) {
       console.log("Error fetching CPOs:", err);
@@ -72,7 +72,7 @@ function Dashboard() {
     setSelectedCPOData(selectedData || null);
 
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/itempos");
+      const { data } = await axios.get("https://os-management.onrender.com/api/itempos");
       const filteredItems = data.filter((item) => item.customerPo === selectedCPOData?.customerpo);
       setCpo(filteredItems);
     } catch (error) {

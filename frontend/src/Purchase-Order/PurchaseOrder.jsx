@@ -76,7 +76,7 @@ const PurchaseOrder = ({
       let hasMore = true;
       while (hasMore) {
         const { data } = await axios.get(
-          `https://os-management.onrender.com/customers?page=${currentPage}&limit=10`
+          `https://os-management.onrender.com/api/customers?page=${currentPage}&limit=10`
         );
         const customers = data.customers;
         allCustomers = [...allCustomers, ...customers];
@@ -96,7 +96,7 @@ const PurchaseOrder = ({
   const loadCpo = async () => {
     try {
       const { data } = await axios.get(
-        "https://os-management.onrender.com/allCustomerPos"
+        "https://os-management.onrender.com/api/allCustomerPos"
       );
       setCustomerPOs(data.customers || []);
     } catch (err) {
@@ -109,7 +109,7 @@ const PurchaseOrder = ({
     try {
       if (purchaseEditing && purchaseEditing._id) {
         const { data } = await axios.put(
-          `https://os-management.onrender.com/purchases/${purchaseEditing._id}`,
+          `https://os-management.onrender.com/api/purchases/${purchaseEditing._id}`,
           {
             customer,
             customerpo,
@@ -129,7 +129,7 @@ const PurchaseOrder = ({
         }
       } else {
         const { data } = await axios.post(
-          "https://os-management.onrender.com/purchase",
+          "https://os-management.onrender.com/api/purchase",
           {
             customer,
             customerpo,

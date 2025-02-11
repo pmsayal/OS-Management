@@ -58,7 +58,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
 
       if (editingSuppliers) {
         const { data } = await axios.put(
-          `https://os-management.onrender.com/suppliers/${editingSuppliers._id}`,
+          `https://os-management.onrender.com/api/suppliers/${editingSuppliers._id}`,
           supplierData
         );
         if (data?.error) {
@@ -77,7 +77,7 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
         }
       } else {
         const { data } = await axios.post(
-          "https://os-management.onrender.com/supplier",
+          "https://os-management.onrender.com/api/supplier",
           supplierData
         );
         if (data?.error) {

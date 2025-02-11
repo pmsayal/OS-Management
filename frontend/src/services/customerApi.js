@@ -1,8 +1,8 @@
 // import axios from 'axios';
 
-// const API_URL = 'https://os-management.onrender.com/customers';
-// const API_URl = 'https://os-management.onrender.com/customer'; 
-// const API_URl_VERIFY = 'https://os-management.onrender.com/customers/check-existing';
+// const API_URL = 'https://os-management.onrender.com/api/customers';
+// const API_URl = 'https://os-management.onrender.com/api/customer'; 
+// const API_URl_VERIFY = 'https://os-management.onrender.com/api/customers/check-existing';
 
 // export const getCustomers = (page, limit, sortField = "", sortOrder = "", searchTerm = "") => {
 //   return axios.get(`${API_URL}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}${searchTerm ? `&search=${searchTerm}` : ""}`);
@@ -37,9 +37,9 @@
 
 import axios from 'axios';
 
-const API_URL_GET = 'https://os-management.onrender.com/customers';
-const API_URL = 'https://os-management.onrender.com/customer'; 
-const API_URl_VERIFY = 'https://os-management.onrender.com/customers/verify';
+const API_URL_GET = 'https://os-management.onrender.com/api/customers';
+const API_URL = 'https://os-management.onrender.com/api/customer'; 
+const API_URl_VERIFY = 'https://os-management.onrender.com/api/customers/verify';
 
 export const getCustomers = (page, limit, sortField = "", sortOrder = "", searchTerm = "") => {
   return axios.get(`${API_URL_GET}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}${searchTerm ? `&search=${searchTerm}` : ""}`);

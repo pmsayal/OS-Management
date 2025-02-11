@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = 'https://os-management.onrender.com/suppliers'; 
-const API_POST_URL = 'https://os-management.onrender.com/supplier'; 
+const API_URL = 'https://os-management.onrender.com/api/suppliers'; 
+const API_POST_URL = 'https://os-management.onrender.com/api/supplier'; 
 
 export const getSuppliers = (page, limit, sortField = "", sortOrder = "", searchTerm = "") => {
   return axios.get(`${API_URL}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}${searchTerm ? `&search=${searchTerm}` : ""}`);

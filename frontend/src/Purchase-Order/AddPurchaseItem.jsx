@@ -52,7 +52,7 @@ function AddPurchaseItem({
     if (isEditing && purchaseEditing) {
       try {
         const { data } = await axios.get(
-          `https://os-management.onrender.com/itemppos?purchaseOrderId=${purchaseEditing._id}`
+          `https://os-management.onrender.com/api/itemppos?purchaseOrderId=${purchaseEditing._id}`
         );
         setPurchaseItems(Array.isArray(data) ? data : []);
         calculateTotalPrice(data);
@@ -68,7 +68,7 @@ function AddPurchaseItem({
   const handlePODelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com/itemppos/${itemId}`
+        `https://os-management.onrender.com/api/itemppos/${itemId}`
       );
       if (data?.error) {
         toast.error(data.error);

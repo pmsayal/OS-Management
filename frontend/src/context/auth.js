@@ -1,6 +1,6 @@
-// local --- http://localhost:8000
+// local --- https://os-management.onrender.com
 
-// Render -- http://localhost:8000
+// Render -- https://os-management.onrender.com
 
 
 //auth.js

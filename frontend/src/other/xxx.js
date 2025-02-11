@@ -34,7 +34,7 @@
 
 //   const loadCustomer = async () => {
 //     try {
-//       const { data } = await axios.get("https://os-management.onrender.com/customers");
+//       const { data } = await axios.get("https://os-management.onrender.com/api/customers");
 //       console.log("Fetched Customers: ", data);
 //       if (Array.isArray(data.customers)) {
 //         setCustomers(data.customers);  
@@ -66,11 +66,11 @@
 //       let response;
 //       if (editingCpo && editingCpo._id) {
 //         response = await axios.put(
-//           `https://os-management.onrender.com/customerpos/${editingCpo._id}`,
+//           `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
 //           { customern, customerpo, date, status }
 //         );
 //       } else {
-//         response = await axios.post("https://os-management.onrender.com/customerpo", {
+//         response = await axios.post("https://os-management.onrender.com/api/customerpo", {
 //           customern,
 //           customerpo,
 //           date,

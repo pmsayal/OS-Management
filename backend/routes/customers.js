@@ -178,10 +178,10 @@ export default router;
 //         return;
 //       }  
 //       console.log("Sending API Request...");
-//       console.log("Making API Call to:", `https://os-management.onrender.com/customer/${editingCustomer._id}`);
+//       console.log("Making API Call to:", `https://os-management.onrender.com/api/customer/${editingCustomer._id}`);
 //       console.log("Payload Sent:", updatedFields);
 //       const res = await axios.put(
-//         `https://os-management.onrender.com/customer/${editingCustomer._id}`,
+//         `https://os-management.onrender.com/api/customer/${editingCustomer._id}`,
 //         updatedFields
 //       ).catch((err) => {
 //         console.error("API Request Failed:", err);

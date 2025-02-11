@@ -58,7 +58,7 @@ const SalesItem = ({ currentCpoId, salesItems }) => {
   const handleDeleteItem = async (id) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com/itempos/${id}`
+        `https://os-management.onrender.com/api/itempos/${id}`
       );
       if (data?.error) {
         toast.error(data.error);

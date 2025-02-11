@@ -37,20 +37,20 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("https://os-management.onrender.com/itemppos")
+    fetch("https://os-management.onrender.com/api/itemppos")
       .then((response) => response.json())
       .then((data) => setPurchaseOrders(data));
   }, []);
 
   useEffect(() => {
-    fetch("https://os-management.onrender.com/itempos").then((response) =>
+    fetch("https://os-management.onrender.com/api/itempos").then((response) =>
       response.json()
     );
   }, []);
 
   const loadCustomers = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/customers");
+      const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       setCustomers(data.customers || []);
     } catch (err) {
       console.log(err);
@@ -65,7 +65,7 @@ function Dashboard() {
 
       do {
         const { data } = await axios.get(
-          `https://os-management.onrender.com/customerpos?page=${currentPage}&limit=6`
+          `https://os-management.onrender.com/api/customerpos?page=${currentPage}&limit=6`
         );
         allCPOs = [...allCPOs, ...data.customers];
         totalPages = data.totalPages;
@@ -81,7 +81,7 @@ function Dashboard() {
     setSelectedCPO(selectedCPO);
 
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/itempos");
+      const { data } = await axios.get("https://os-management.onrender.com/api/itempos");
 
       const filteredItems = data.filter(
         (item) => item.customerPo === selectedCPO
@@ -97,7 +97,7 @@ function Dashboard() {
 
   const loadPOs = async () => {
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/purchases");
+      const { data } = await axios.get("https://os-management.onrender.com/api/purchases");
       const uniquePOs = [
         ...new Set(data.items.map((purchase) => purchase.purchase)),
       ];
@@ -121,7 +121,7 @@ function Dashboard() {
     console.log("Selected PO ID:", selectedPO);
 
     try {
-      const { data } = await axios.get("https://os-management.onrender.com/purchases");
+      const { data } = await axios.get("https://os-management.onrender.com/api/purchases");
       const selectedPurchase = data.items.find(
         (purchase) => purchase.purchase === selectedPO
       );
@@ -132,7 +132,7 @@ function Dashboard() {
         setSelectedPO(selectedPO);
 
         const itemResponse = await axios.get(
-          `https://os-management.onrender.com/itemppos?purchaseOrderId=${associatedID}`
+          `https://os-management.onrender.com/api/itemppos?purchaseOrderId=${associatedID}`
         );
 
         const filteredItems = itemResponse.data.filter(
