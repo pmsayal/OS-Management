@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 
-const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
+const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  }) => {
   const [items, setItems] = useState([]);
   const [item, setItem] = useState("");
   const [qty, setQty] = useState("");
@@ -47,7 +47,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
   useEffect(() => {
     if (qty !== "") {
       const remainingQty = availableQty - parseInt(qty);
-      setRemainingQty(remainingQty >= 0 ? remainingQty : 0 )      
+      setRemainingQty(remainingQty >= 0 ? remainingQty : 0);
     } else {
       setRemainingQty(availableQty);
     }
@@ -63,9 +63,39 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
     setSalesPrice(finalPrice.toFixed(2));
   }, [qty, cost, tax]);
 
+  useEffect(() => {
+    if (itemToEdit && items.length > 0) {
+      console.log("Editing Item:", itemToEdit);
+      setQty(itemToEdit.qty);
+      setCost(itemToEdit.cost);
+      setTax(itemToEdit.tax);
+      setSalesPrice(itemToEdit.salesPrice);
+  
+      const selectedItem = items.find((i) => i._id === itemToEdit.item._id);
+      if (selectedItem) {
+        setAvailableQty(selectedItem.stock);
+      } else {
+        setAvailableQty(0); 
+      }  
+      setRemainingQty(itemToEdit.remainingQty);
+  
+      if (typeof itemToEdit.item === "string") {
+        setItem(itemToEdit.item);
+      } else if (itemToEdit.item && itemToEdit.item._id) {
+        setItem(itemToEdit.item._id);
+      }
+    } else {
+      setItem("");
+      setQty("");
+      setCost("");
+      setTax("");
+      setSalesPrice("");
+      setAvailableQty(0);
+      setRemainingQty(0);
+    }
+  }, [itemToEdit, items]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSave = async () => {
     try {
       const formData = new FormData();
       formData.append("item", item);
@@ -73,7 +103,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
       formData.append("cost", cost);
       formData.append("tax", tax);
       formData.append("salesPrice", salesPrice);
-      formData.append("customerPo", currentCpoId);   
+      formData.append("customerPo", currentCpoId);
   
       const response = await axios.post(
         "https://os-management.onrender.com/api/itempo",
@@ -81,39 +111,82 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
-      );
+      );  
       if (response.status === 201) {
         toast.success(response.data.message || "Item added successfully!");
-        refreshData(); 
-        closeAddForm(); 
+        refreshData();
+        closeAddForm();
       } else {
         toast.error(response.data.error || "Unexpected error occurred.");
       }
     } catch (err) {
-      if (err.response && err.response.status !== 201) {
-        console.error("Error:", err.message);
-        toast.error("ERROR: Failed to add item due to server error.");      
-      }
+      console.error("Error:", err.message);
+      toast.error("ERROR: Failed to add item due to server error.");
     }
   };
 
+  const handleUpdate = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("item", item);
+      formData.append("qty", qty);
+      formData.append("cost", cost);
+      formData.append("tax", tax);
+      formData.append("salesPrice", salesPrice);
+      formData.append("customerPo", itemToEdit.customerPo);
+
+      console.log("Updating with data:", {
+        item,
+        qty,
+        cost,
+        tax,
+        salesPrice,
+        customerPo: itemToEdit.customerPo,
+    });
+  
+      const response = await axios.put(
+        `https://os-management.onrender.com/api/itempos/${itemToEdit._id}`,
+        formData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+  
+      if (response.status === 200) {
+        toast.success(response.data.message || "Item updated successfully!");
+        refreshData();
+        closeAddForm();
+      } else {
+        toast.error(response.data.error || "Unexpected error occurred.");
+      }
+    } catch (err) {
+      console.error("Error:", err.message);
+      toast.error("ERROR: Failed to update item due to server error.");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (itemToEdit) {
+      await handleUpdate(); 
+    } else {
+      await handleSave(); 
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="salesorder-form">
-      <h3 className="form-heading">Add SalesItem</h3>
+      <h3 className="form-heading">{itemToEdit ? "Edit" : "Add"} SalesItem</h3>
       <div className="customer-form">
         <label htmlFor="item" className="customer-form__label">
-          <span>
-            Item: <span className="required-field">*</span>
-          </span>
-          <select
-            id="item"
-            value={item}
-            onChange={handleItemChange}
-            className="customer-form__input"
-            required
-          >
-            <option value="">Select an item</option>
+            Item: 
+          <select 
+            id="item" 
+            value={item} onChange={handleItemChange} 
+            required 
+            disabled={!!itemToEdit}
+            className="customer-form__input">
+            <option value="">Select item</option>
             {items.map((item) => (
               <option key={item._id} value={item._id}>
                 {item.item}
@@ -200,9 +273,8 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm }) => {
       </div>
 
       <div className="ButtonContainer1">
-
         <button type="submit" className="StyledButton1">
-          Save
+          {itemToEdit ? "Update" : "Save"}
         </button>
         <button type="button" className="StyledButton11" onClick={closeAddForm}>
           Cancel

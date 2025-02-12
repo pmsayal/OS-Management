@@ -5,7 +5,7 @@ import { Select } from "antd";
 import "../StyleCSS/Customer.css";
 const { Option } = Select;
 
-function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingSuppliers, handleClose }) {
+function AddSuppliers({editingSuppliers, setVisible, loadSuppliers, setEditingSuppliers, handleClose}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
@@ -44,65 +44,52 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); //new
-    try {
-      const supplierData = new FormData();
-      supplierData.append("name", name);
-      supplierData.append("email", email);
-      supplierData.append("phone", phone);
-      supplierData.append("area", area);
-      supplierData.append("address", address);
-      supplierData.append("city", city);
-      supplierData.append("gstn", gstn);
-      supplierData.append("status", status);
+    setLoading(true); 
 
-      if (editingSuppliers) {
-        const { data } = await axios.put(
-          `https://os-management.onrender.com/api/suppliers/${editingSuppliers._id}`,
-          supplierData
-        );
-        if (data?.error) {
-          toast.error(data.error);
+    try {
+        const supplierData = new FormData();
+        supplierData.append("name", name);
+        supplierData.append("email", email);
+        supplierData.append("phone", phone);
+        supplierData.append("area", area);
+        supplierData.append("address", address);
+        supplierData.append("city", city);
+        supplierData.append("gstn", gstn);
+        supplierData.append("status", status);
+
+        let data;
+        if (editingSuppliers) {
+            data = await axios.put(
+                `https://os-management.onrender.com/api/suppliers/${editingSuppliers._id}`,
+                supplierData
+            );
         } else {
-          toast.success(`"${data.name}" is updated`);
-          loadSuppliers(1);
-          setVisible(false);
-          setTimeout(() => {
-            toast.success(`"${data.name}" is updated`);
-            loadSuppliers(1);
-            setVisible(false);//new
-            setEditingSuppliers(null)
-            handleClose()
-          }, 3000); //new
+            data = await axios.post(
+                "https://os-management.onrender.com/api/supplier",
+                supplierData
+            );
         }
-      } else {
-        const { data } = await axios.post(
-          "https://os-management.onrender.com/api/supplier",
-          supplierData
-        );
         if (data?.error) {
-          toast.error(data.error);
+            toast.error(data.error);
         } else {
-          toast.success(`"${data.name}" is added`);
-          loadSuppliers(1);
-          setVisible(false);
-          setTimeout(() => {
-            toast.success(`"${data.name}" is updated`);
-            loadSuppliers(1);
-            setVisible(false);//new
-            setEditingSuppliers(null)
-            handleClose()
-          }, 3000); //new
+            setTimeout(() => {
+                toast.success(`"${data.name}" is ${editingSuppliers ? "updated" : "added"}`);
+                loadSuppliers(1);
+                setVisible(false);
+                setEditingSuppliers(null);
+                handleClose();
+            }, 5000); 
         }
-      }
     } catch (err) {
-      console.log(err);
+        console.log(err);
+    } finally {
+        setLoading(false);
     }
-  };
+};
 
   const handleCancel = () => {
     resetForm();
-    setEditingSuppliers(null)
+    setEditingSuppliers(null);
   };
 
   return (
@@ -221,15 +208,17 @@ function AddSuppliers({ editingSuppliers, setVisible, loadSuppliers, setEditingS
         </div>
         <div className="ButtonContainer1">
           <button type="submit" className="StyledButton1">
-            {loading ? "" : editingSuppliers ? "Update" : "Add"} 
+            {loading  ? 
+              editingSuppliers ? "Updating..." : "Saving..." : 
+              editingSuppliers ? "Update" : "Add"
+            }
           </button>
           <button
             type="button"
             className="StyledButton11"
-            // onClick={handleCancel} 
             onClick={() => {
               handleClose();
-              resetForm(); 
+              resetForm();
             }}
           >
             Cancel

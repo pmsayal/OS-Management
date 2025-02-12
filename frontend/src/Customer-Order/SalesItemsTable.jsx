@@ -34,7 +34,7 @@ const HeadTr = styled(Tr)`
   color: black;
 `;
 
-const SalesItem = ({ currentCpoId, salesItems }) => {
+const SalesItem = ({ currentCpoId, salesItems, onEdit  }) => {
   const [ totalCustomerPOLocal, setTotalCustomerPOLocal] = useState(0);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const SalesItem = ({ currentCpoId, salesItems }) => {
                   <div className="button-group">
                     <Tooltip title="Edit">
                       <button
-                        onClick={() => console.log("Edit Item")}
+                        onClick={() => onEdit(item)}
                         className="btns1"
                       >
                         <BiEdit className="icon-size" />
@@ -118,7 +118,7 @@ const SalesItem = ({ currentCpoId, salesItems }) => {
             ))
           ) : (
             <Tr>
-              <Td colSpan="6">No items found</Td>
+              <Td colSpan="6"></Td>
             </Tr>
           )}
         </tbody>

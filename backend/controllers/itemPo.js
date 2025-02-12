@@ -91,7 +91,8 @@ export const readItemPo = async (req, res) => {
 
 export const updateItemPo = async (req, res) => {
   try {
-    const { qty, cost, tax, salesPrice, customerPo } = req.body; // Get data from req.body
+    const { qty, cost, tax, salesPrice, customerPo } = req.body; 
+    console.log("Request Body:", req.body);
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ error: 'Invalid itempo ID' });
@@ -106,6 +107,7 @@ export const updateItemPo = async (req, res) => {
     if (!updatedItemPo) {
       return res.status(404).json({ error: 'ItemPo not found' });
     }
+    console.log(`Item updated successfully with CPO ID: ${updatedItemPo}`);
 
     res.json(updatedItemPo);
   } catch (err) {

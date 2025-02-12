@@ -1,5 +1,5 @@
 import "../StyleCSS/Main.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdEmail, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
@@ -11,13 +11,22 @@ function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
-  const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  useEffect(() => {
+    const savedCredentials = JSON.parse(localStorage.getItem("credentials"));
+    if (savedCredentials) {
+      setEmail(savedCredentials.email);
+      setPassword(savedCredentials.password);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,10 +35,10 @@ function Home() {
         email,
         password,
       });
-      console.log(data)
-  
+      console.log(data);
+
       if (data?.error) {
-        toast.error(data.error); 
+        toast.error(data.error);
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
         toast.success("Login successful");
@@ -42,14 +51,14 @@ function Home() {
         } else if (err.response.data.error === "Incorrect password") {
           toast.error("Incorrect password, please try again");
         } else {
-          toast.error(err.response.data.error);  
+          toast.error(err.response.data.error);
         }
       } else {
         toast.error("Login failed. Try again.");
       }
     }
   };
-  
+
   const handleSignUpClick = () => {
     setIsLogin(true);
   };
@@ -135,7 +144,6 @@ function Home() {
                   </div>
                 </div>
 
-
                 <div className="switch">
                   <div className="buttonForget">
                     <Link to="/forgot">
@@ -149,6 +157,14 @@ function Home() {
                 <button className="StyledButton1" type="submit">
                   Login
                 </button>
+                <div>
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={() => setRememberMe(!rememberMe)}
+                  />
+                  <label>Remember Me</label>
+                </div>
               </form>
             </div>
           </div>
@@ -160,3 +176,67 @@ function Home() {
 
 export default Home;
 
+// import React from "react";
+// import { Link } from "react-router-dom";
+// import { MdEmail, MdVisibilityOff } from "react-icons/md";
+// import "../StyleCSS/Login.css";
+// import "../StyleCSS/Slider.css";
+
+// import slider3 from "../Images/slider-3.jpg";
+
+// function Home() {
+//   return (
+//     <div className="container">
+
+//         <div className="image-container">
+//           {/* <Slider /> */}
+//           <img src={slider3} alt="Home Banner" className="home-banner" />
+//         </div>
+
+//         <div className="login-box">
+//           <div className="logo">
+//             <Link to="/" className="logo-link">
+//               <img src="home.svg" alt="Home Icon" />
+//               <h2>Inventory Management</h2>
+//             </Link>
+//           </div>
+
+//           <form>
+//             <h2 className="title">Sign In</h2>
+
+//             <div className="input-box">
+//               <MdEmail className="icon" />
+//               <input type="email" placeholder="Enter your Email" required />
+//             </div>
+
+//             <div className="input-box">
+//               <input
+//                 type="password"
+//                 placeholder="Enter your Password"
+//                 required
+//               />
+//               <MdVisibilityOff className="icon" />
+//             </div>
+
+//             <div className="remember">
+//               <label>
+//                 <input type="checkbox" /> Remember Me
+//               </label>
+//               <Link to="/forgot">Forgot Password?</Link>
+//             </div>
+
+//             <button type="submit" className="login-btn">
+//               Login
+//             </button>
+
+//             <div className="signup-link">
+//               Don't have an account? <Link to="/signup">Sign Up</Link>
+//             </div>
+//           </form>
+//         </div>
+
+//     </div>
+//   );
+// }
+
+// export default Home;

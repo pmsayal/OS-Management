@@ -21,11 +21,12 @@ const SalesOrder = ({
   const [currentCpoId, setCurrentCpoId] = useState("");
   const [addClick, setAddClick] = useState(false);
   const [salesItems, setSalesItems] = useState([]);
+  const [itemToEdit, setItemToEdit] = useState(null);
 
   useEffect(() => {
     if (editingCpo && editingCpo._id) {
-      setCustomer(editingCpo.customern?._id || "");
-      setCustomerpo(editingCpo.customerpo || "");
+      setCustomer(editingCpo.customern?._id || editingCpo.customern?._id );
+      setCustomerpo(editingCpo.customerpo || editingCpo.customerpo);
       setDate(
         editingCpo.date
           ? new Date(editingCpo.date).toISOString().split("T")[0]
@@ -125,6 +126,18 @@ const SalesOrder = ({
     }
   };
 
+  const handleEditSalesItem = (item) => {
+    console.log("Editing Sales Item:", item)
+    setItemToEdit(item);
+    setCustomer(item.customern);
+    setCustomerpo(item.customerpo);
+    setDate(item.date);
+    setStatus(item.status);
+    setCurrentCpoId(item._id);
+    setAddClick(true);
+  };
+
+
   const handleError = (err) => {
     if (err.response) {
       console.error("Error:", err.response.data);
@@ -141,15 +154,17 @@ const SalesOrder = ({
     e.preventDefault();
     if (editingCpo && editingCpo._id) {
       await handlePut(); 
-      loadSalesItemsForCPO(currentCpoId);
+      await loadSalesItemsForCPO(currentCpoId);
     } else {
       await handlePost(); 
-      loadSalesItemsForCPO(currentCpoId); 
+      await loadSalesItemsForCPO(currentCpoId); 
     }
   };
 
+
   const closeAddForm = () => {
     setAddClick(false);
+    setItemToEdit(null);
   }
 
   return (
@@ -159,6 +174,7 @@ const SalesOrder = ({
           refreshData={loadSalesItemsForCPO} 
           currentCpoId={currentCpoId}
           closeAddForm={closeAddForm}
+          itemToEdit={itemToEdit}
         />
       ) : (
         <form onSubmit={handleSubmit}>
@@ -234,7 +250,7 @@ const SalesOrder = ({
             Add SalesItem
           </button>) : ""} 
           <h1>{editingCpo ? "Sales Item Table" : ""}</h1>
-          {editingCpo ? <SalesItem currentCpoId={currentCpoId} salesItems={salesItems} /> : ""}
+          {editingCpo ? <SalesItem currentCpoId={currentCpoId} salesItems={salesItems} onEdit={handleEditSalesItem}/> : ""}
           <div className="ButtonContainer">
             <button type="submit" className="StyledButton1">
               {editingCpo ? "Update" : "Save"}
