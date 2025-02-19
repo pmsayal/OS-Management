@@ -197,8 +197,8 @@ function Dashboard() {
               >
                 <option value="">Select CPO</option>
                 {cpoList.map((cpo) => (
-                  <option key={cpo._id} value={cpo._id}>
-                    {cpo.customern?.name}
+                  <option key={cpo.value} value={cpo.value}>
+                    {cpo.customerpo}
                   </option>
                 ))}
               </select>
@@ -214,8 +214,7 @@ function Dashboard() {
                   </option>
                 ))}
               </select>
-              <label htmlFor="orderDate" className="">
-                <option></option>
+              <label htmlFor="orderDate" className="OrderDate">
                 Order Date:
               </label>
               <input
@@ -223,11 +222,13 @@ function Dashboard() {
                 id="orderDate"
                 onChange={handleDateChange}
                 max={todayDate}
-                className="label"
+                className="customer-salesorder_input22"
               />
-              To
+              <label htmlFor="orderDate" className="OrderDate">
+                To:
+              </label>              
               <input
-                className="label"
+                className="customer-salesorder_input22"
                 type="date"
                 id="endDate"
                 onChange={handleDateChange}

@@ -224,6 +224,7 @@ function ManagePurchase() {
                 id="orderDate"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
+                className="orderinput"
               />
               <Select
                 className="SearchbelDropdown"

@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 
-const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  }) => {
+const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadCPO, currentPage  }) => {
   const [items, setItems] = useState([]);
   const [item, setItem] = useState("");
   const [qty, setQty] = useState("");
@@ -125,50 +125,75 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  }) =>
     }
   };
 
+  // const handleUpdate = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("item", item);
+  //     formData.append("qty", qty);
+  //     formData.append("cost", cost);
+  //     formData.append("tax", tax);
+  //     formData.append("salesPrice", salesPrice);
+  //     formData.append("customerPo", itemToEdit.customerPo);
+
+  //     const response = await axios.put(
+  //       `https://os-management.onrender.com/api/itempos/${itemToEdit._id}`,
+  //       formData,
+  //       {
+  //         headers: { "Content-Type": "application/json" },
+  //       }
+  //     );
+  
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message || "Item updated successfully!");
+  //       refreshData();
+  //       await loadCPO(currentPage);
+  //       closeAddForm();
+  //     } else {
+  //       toast.error(response.data.error || "Unexpected error occurred.");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error:", err.message);
+  //     toast.error("ERROR: Failed to update item due to server error.");
+  //   }
+  // };
+
   const handleUpdate = async () => {
     try {
-      const formData = new FormData();
-      formData.append("item", item);
-      formData.append("qty", qty);
-      formData.append("cost", cost);
-      formData.append("tax", tax);
-      formData.append("salesPrice", salesPrice);
-      formData.append("customerPo", itemToEdit.customerPo);
+        const formData = new FormData();
+        formData.append("item", item);
+        formData.append("qty", qty);
+        formData.append("cost", cost);
+        formData.append("tax", tax);
+        formData.append("salesPrice", salesPrice);
+        formData.append("customerPo", itemToEdit.customerPo);
 
-      console.log("Updating with data:", {
-        item,
-        qty,
-        cost,
-        tax,
-        salesPrice,
-        customerPo: itemToEdit.customerPo,
-    });
-  
-      const response = await axios.put(
-        `https://os-management.onrender.com/api/itempos/${itemToEdit._id}`,
-        formData,
-        {
-          headers: { "Content-Type": "application/json" },
+        const response = await axios.put(
+            `https://os-management.onrender.com/api/itempos/${itemToEdit._id}`,
+            formData,
+            {
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+
+        if (response.status === 200) {
+            toast.success(response.data.message || "Item updated successfully!");
+            refreshData(); 
+            await loadCPO(currentPage); 
+            closeAddForm();
+        } else {
+            toast.error(response.data.error || "Unexpected error occurred.");
         }
-      );
-  
-      if (response.status === 200) {
-        toast.success(response.data.message || "Item updated successfully!");
-        refreshData();
-        closeAddForm();
-      } else {
-        toast.error(response.data.error || "Unexpected error occurred.");
-      }
     } catch (err) {
-      console.error("Error:", err.message);
-      toast.error("ERROR: Failed to update item due to server error.");
+        console.error("Error:", err.message);
+        toast.error("ERROR: Failed to update item due to server error.");
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (itemToEdit) {
       await handleUpdate(); 
+      refreshData();
     } else {
       await handleSave(); 
     }

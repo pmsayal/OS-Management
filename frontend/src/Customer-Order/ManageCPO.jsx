@@ -122,6 +122,7 @@ function ManageCPO() {
                 id="orderDate"
                 value={orderDate}
                 onChange={(e) => setOrderDate(e.target.value)}
+                className="orderinput"
               />
               <Select
                 className="SearchbelDropdown"
@@ -148,7 +149,7 @@ function ManageCPO() {
               </button>
               <button className="StyledButton" onClick={() => {
                 setVisible(true);
-                setEditingCpo(null); // Reset editing state for adding
+                setEditingCpo(null); 
               }}>
                 <BiAddToQueue className="Add" />
                 Add CPO
@@ -235,6 +236,8 @@ function ManageCPO() {
           editingCpo={editingCpo}
           refreshData={loadCpo}
           refreshCustomers={loadCpoList}
+          currentPage={currentPage} 
+          loadCpo={loadCpo}
         />
       </Modal>
     </>
@@ -242,3 +245,10 @@ function ManageCPO() {
 }
 
 export default ManageCPO;
+
+
+
+
+
+
+

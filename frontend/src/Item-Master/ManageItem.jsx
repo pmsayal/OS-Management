@@ -210,10 +210,10 @@ function ManageItem() {
     }
   };
 
-  const handleShowStock = (item) => {
-    setSelectedItem(item);
-    setShowStock(true);
-  };
+  // const handleShowStock = (item) => {
+  //   setSelectedItem(item);
+  //   setShowStock(true);
+  // };
   
 
   const handleShowItemPrice = (item) => {
@@ -290,7 +290,7 @@ function ManageItem() {
 
 
   useEffect(() => {
-    console.log("after update filteredIemss", filteredItems);
+    // console.log("after update filteredIemss", filteredItems);
   }, [filteredItems]);
   
 
@@ -397,12 +397,12 @@ function ManageItem() {
                           </button>
                         </Tooltip>
                         <Tooltip title="View Utilization">
-                          <button
+                          {/* <button
                             className="btns1"
                             onClick={() => handleShowStock(item)}
                           >
                             <BiInfoCircle className="icon-size"/>
-                          </button>
+                          </button> */}
                         </Tooltip>
                         <Tooltip title="Delete">
                           <button
@@ -441,7 +441,7 @@ function ManageItem() {
           }}
         />
       </Modal>
-      <Modal
+      {/* <Modal
         visible={showStock}
         onCancel={() => setShowStock(false)}
         footer={null}
@@ -451,7 +451,7 @@ function ManageItem() {
           item={selectedItem}
           onClose={() => setShowStock(false)}
         />
-      </Modal>
+      </Modal> */}
       <Modal
         visible={showItem}
         onCancel={() => setShowItem(false)}

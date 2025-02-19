@@ -4,7 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../StyleCSS/Customer.css";
 import "../StyleCSS/SalesPurchase.css";
-import SalesItem from "../Customer-Order/SalesItemsTable"; 
+import SalesItem from "../Customer-Order/SalesItemsTable";
 import AddEditPo from "./AddEditPo";
 
 const SalesOrder = ({
@@ -12,6 +12,8 @@ const SalesOrder = ({
   refreshData,
   setVisible,
   refreshCustomers,
+  currentPage,
+  loadCpo,
 }) => {
   const [customern, setCustomer] = useState("");
   const [customerpo, setCustomerpo] = useState("");
@@ -23,10 +25,27 @@ const SalesOrder = ({
   const [salesItems, setSalesItems] = useState([]);
   const [itemToEdit, setItemToEdit] = useState(null);
 
+  // useEffect(() => {
+  //   if (editingCpo && editingCpo._id) {
+  //     setCustomer(editingCpo.customern?._id || editingCpo.customern?._id );
+  //     setCustomerpo(editingCpo.customerpo || editingCpo.customerpo);
+  //     setDate(
+  //       editingCpo.date
+  //         ? new Date(editingCpo.date).toISOString().split("T")[0]
+  //         : ""
+  //     );
+  //     setStatus(editingCpo.status || "");
+  //     setCurrentCpoId(editingCpo._id);
+  //     loadSalesItemsForCPO(editingCpo._id);
+  //   } else {
+  //     resetForm();
+  //   }
+  // }, [editingCpo]);
+
   useEffect(() => {
-    if (editingCpo && editingCpo._id) {
-      setCustomer(editingCpo.customern?._id || editingCpo.customern?._id );
-      setCustomerpo(editingCpo.customerpo || editingCpo.customerpo);
+    if (editingCpo) {
+      setCustomer(editingCpo.customern?._id || "");
+      setCustomerpo(editingCpo.customerpo || "");
       setDate(
         editingCpo.date
           ? new Date(editingCpo.date).toISOString().split("T")[0]
@@ -34,11 +53,11 @@ const SalesOrder = ({
       );
       setStatus(editingCpo.status || "");
       setCurrentCpoId(editingCpo._id);
-      loadSalesItemsForCPO(editingCpo._id); 
+      loadSalesItemsForCPO(editingCpo._id);
     } else {
-      resetForm(); 
+      resetForm();
     }
-  }, [editingCpo]);
+  }, [editingCpo, salesItems]); 
 
   const resetForm = () => {
     setCustomer("");
@@ -68,8 +87,10 @@ const SalesOrder = ({
 
   const loadSalesItemsForCPO = async (cpoId) => {
     if (cpoId) {
-      const { data } = await axios.get(`https://os-management.onrender.com/api/itempos?customerPo=${cpoId}`);
-      setSalesItems(data); 
+      const { data } = await axios.get(
+        `https://os-management.onrender.com/api/itempos?customerPo=${cpoId}`
+      );
+      setSalesItems(data);
     }
   };
 
@@ -80,20 +101,16 @@ const SalesOrder = ({
       formData.append("customerpo", customerpo);
       formData.append("date", date);
       formData.append("status", status);
-  
-      await axios.post(
-        "https://os-management.onrender.com/api/customerpo",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );  
+
+      await axios.post("https://os-management.onrender.com/api/customerpo", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Customer PO saved successfully");
       if (refreshCustomers) refreshCustomers();
       refreshData();
-      setVisible(false); 
+      setVisible(false);
       resetForm();
     } catch (err) {
       handleError(err);
@@ -107,7 +124,7 @@ const SalesOrder = ({
       formData.append("customerpo", customerpo);
       formData.append("date", date);
       formData.append("status", status);
-  
+
       await axios.put(
         `https://os-management.onrender.com/api/customerpos/${editingCpo._id}`,
         formData,
@@ -116,18 +133,18 @@ const SalesOrder = ({
             "Content-Type": "multipart/form-data",
           },
         }
-      );  
+      );
       toast.success("Customer PO updated successfully");
       refreshData();
-      setVisible(false); 
-      resetForm(); 
+      setVisible(false);
+      resetForm();
     } catch (err) {
       handleError(err);
     }
   };
 
   const handleEditSalesItem = (item) => {
-    console.log("Editing Sales Item:", item)
+    console.log("Editing Sales Item:", item);
     setItemToEdit(item);
     setCustomer(item.customern);
     setCustomerpo(item.customerpo);
@@ -137,44 +154,46 @@ const SalesOrder = ({
     setAddClick(true);
   };
 
-
   const handleError = (err) => {
     if (err.response) {
       console.error("Error:", err.response.data);
       toast.error(
-        `Failed to update customer PO: ${err.response.data.error || "Unknown error"}`
+        `Failed to update customer PO: ${
+          err.response.data.error || "Unknown error"
+        }`
       );
     } else {
       console.error("Error:", err.message);
       toast.error("Failed to save customer PO: " + err.message);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (editingCpo && editingCpo._id) {
-      await handlePut(); 
+      await handlePut();
       await loadSalesItemsForCPO(currentCpoId);
     } else {
-      await handlePost(); 
-      await loadSalesItemsForCPO(currentCpoId); 
+      await handlePost();
+      await loadSalesItemsForCPO(currentCpoId);
     }
   };
-
 
   const closeAddForm = () => {
     setAddClick(false);
     setItemToEdit(null);
-  }
+  };
 
   return (
     <>
       {addClick ? (
         <AddEditPo
-          refreshData={loadSalesItemsForCPO} 
+          refreshData={loadSalesItemsForCPO}
           currentCpoId={currentCpoId}
           closeAddForm={closeAddForm}
           itemToEdit={itemToEdit}
+          loadCPO={loadCpo}
+          currentPage={currentPage}
         />
       ) : (
         <form onSubmit={handleSubmit}>
@@ -245,19 +264,38 @@ const SalesOrder = ({
               </div>
             </div>
           </div>
-          {editingCpo ? 
-          (<button type="button" onClick={() => setAddClick(true)} className="StyledBtn">
-            Add SalesItem
-          </button>) : ""} 
+          {editingCpo ? (
+            <button
+              type="button"
+              onClick={() => setAddClick(true)}
+              className="StyledBtn"
+            >
+              Add SalesItem
+            </button>
+          ) : (
+            ""
+          )}
           <h1>{editingCpo ? "Sales Item Table" : ""}</h1>
-          {editingCpo ? <SalesItem currentCpoId={currentCpoId} salesItems={salesItems} onEdit={handleEditSalesItem}/> : ""}
+          {editingCpo ? (
+            <SalesItem
+              currentCpoId={currentCpoId}
+              salesItems={salesItems}
+              onEdit={handleEditSalesItem}
+            />
+          ) : (
+            ""
+          )}
           <div className="ButtonContainer">
             <button type="submit" className="StyledButton1">
               {editingCpo ? "Update" : "Save"}
             </button>
-            <button type="button" className="StyledButton11" onClick={() => {
-              setVisible(false);
-            }}>
+            <button
+              type="button"
+              className="StyledButton11"
+              onClick={() => {
+                setVisible(false);
+              }}
+            >
               Cancel
             </button>
           </div>

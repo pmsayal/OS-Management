@@ -39,11 +39,11 @@
   }
 }
 
-/* Sidebar */
+
 .sidebar {
-  width: 350px;
-  background-color: #124e88;
-  padding: 3.2rem 3rem;
+  /* width: 350px; */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.2rem 1rem;
   border-right: 1px solid lightgray;
   grid-row: 1 / -1;
   display: flex;
@@ -51,7 +51,7 @@
   gap: 3.2rem;
 }
 
-/* MainPage Navigation */
+
 .nav-list {
   display: flex;
   flex-direction: column;
@@ -61,22 +61,16 @@
   color: transparent;
 }
 
-.nav-link-background {
-  /* background-color: #124e88; */
-}
-
 .nav-link {
-  width: 250px;
+  width: 270px;
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  color: darkgray;
+  color: white;
   font-size: 2rem;
   font-weight: 800;
-  padding: 1.2rem 0.8rem;
+  padding: 1.5rem 0.8rem;
   transition: all 0.3s;
-  background-color: #124e88;
-  /* border-radius: 25px 0 0 25px; */
 }
 
 .nav-link:hover,
@@ -86,10 +80,16 @@
   border-radius: 25px 0 0 25px;
 }
 
+.nav-link.inactive {
+  color: var(--color-grey-600);
+  background-color: white;
+  border-radius: 0 25px 25px 0;
+}
+
 .nav-link svg {
   width: 2.4rem;
   height: 2.4rem;
-  color: var(--color-grey-400);
+  color: white;
   transition: all 0.3s;
 }
 
@@ -98,7 +98,7 @@
   color: var(--color-brand-600);
 }
 
-/* Home Component */
+
 .home-container {
   display: flex;
   justify-content: center;
@@ -119,13 +119,13 @@
   padding: 20px;
 }
 
-/*login Form*/
+
 .form {
   width: 25%;
   padding: 20px;
   margin-top: 12vh;
 }
-/*Sign-up Form*/
+
 .Sign-Up-form {
   width: 25%;
   height: 30vh;
@@ -147,7 +147,6 @@
 }
 
 
-/*form-forget*/
 .form-forget {
   position: absolute;
   top: 10vh;
@@ -181,7 +180,7 @@
 .StyledButton1 {
   font-size: 20px;
   color: #fffcfc;
-  background-color: #007bff;
+  background-color: #6e65c6;
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
