@@ -25,22 +25,6 @@ const SalesOrder = ({
   const [salesItems, setSalesItems] = useState([]);
   const [itemToEdit, setItemToEdit] = useState(null);
 
-  // useEffect(() => {
-  //   if (editingCpo && editingCpo._id) {
-  //     setCustomer(editingCpo.customern?._id || editingCpo.customern?._id );
-  //     setCustomerpo(editingCpo.customerpo || editingCpo.customerpo);
-  //     setDate(
-  //       editingCpo.date
-  //         ? new Date(editingCpo.date).toISOString().split("T")[0]
-  //         : ""
-  //     );
-  //     setStatus(editingCpo.status || "");
-  //     setCurrentCpoId(editingCpo._id);
-  //     loadSalesItemsForCPO(editingCpo._id);
-  //   } else {
-  //     resetForm();
-  //   }
-  // }, [editingCpo]);
 
   useEffect(() => {
     if (editingCpo) {
@@ -71,7 +55,8 @@ const SalesOrder = ({
     try {
       const { data } = await axios.get("https://os-management.onrender.com/api/customers");
       if (Array.isArray(data.customers)) {
-        setCustomers(data.customers);
+        const activeCustomers = data.customers.filter((customer) => customer.status === "Active");
+        setCustomers(activeCustomers);
       } else {
         setCustomers([]);
       }
@@ -258,8 +243,9 @@ const SalesOrder = ({
                   onChange={(event) => setStatus(event.target.value)}
                   className="customer-salesorder_input1"
                 >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
+                  <option value="" disabled>Select Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
                 </select>
               </div>
             </div>

@@ -41,7 +41,8 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const loadItemsprice = async (selectedItem, pageNumber) => {
     try {
       const { data } = await axios.get(
-        `https://os-management.onrender.com/api/itemprices?item=${selectedItem.item}&page=${pageNumber}&sortField=${sortField}&sortOrder=${sortOrder}`
+        `https://os-management.onrender.com
+/api/itemprices?item=${selectedItem.item}&page=${pageNumber}&sortField=${sortField}&sortOrder=${sortOrder}`
       );
       setItemsprice(data.items || []);
       setTotalPages(data.totalPages);
@@ -117,7 +118,8 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com/api/itemprices/${id}`
+        `https://os-management.onrender.com
+/api/itemprices/${id}`
       );
 
       if (data?.error) {

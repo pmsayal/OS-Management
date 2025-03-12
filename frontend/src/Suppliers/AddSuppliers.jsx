@@ -60,7 +60,8 @@ function AddSuppliers({editingSuppliers, setVisible, loadSuppliers, setEditingSu
         let data;
         if (editingSuppliers) {
             data = await axios.put(
-                `https://os-management.onrender.com/api/suppliers/${editingSuppliers._id}`,
+                `https://os-management.onrender.com
+/api/suppliers/${editingSuppliers._id}`,
                 supplierData
             );
         } else {
@@ -185,8 +186,9 @@ function AddSuppliers({editingSuppliers, setVisible, loadSuppliers, setEditingSu
               value={status}
               onChange={(value) => setStatus(value)}
             >
-              <Option value="active">Actvie</Option>
-              <Option value="inactive">Inactive</Option>
+              <Option value="" disabled>Select Status</Option>
+              <Option value="Active">Actvie</Option>
+              <Option value="Inactive">Inactive</Option>
             </Select>
           </label>
           <label className="customer-form__label">

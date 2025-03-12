@@ -378,9 +378,9 @@ function AddCustomer({ editingCustomer, setVisible, loadCustomers, setEditingCus
               className="customer-form__input"
               required
             >
-              <option value=""></option>
-              <option value="active">active</option>
-              <option value="inactive">inactive</option>
+              <option value="" disabled>Select Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
             </select>
           </label>
           <label className="customer-form__label">

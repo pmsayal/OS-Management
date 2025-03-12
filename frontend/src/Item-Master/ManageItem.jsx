@@ -75,7 +75,8 @@ function ManageItem() {
     let hasMore = true;
     while (hasMore) {
       const supplierResponse = await axios.get(
-        `https://os-management.onrender.com/api/suppliers?page=${currentPage}&limit=10`
+        `https://os-management.onrender.com
+/api/suppliers?page=${currentPage}&limit=10`
       );
       const suppliers = supplierResponse.data.suppliers;
       allSuppliers = [...allSuppliers, ...suppliers];
@@ -94,7 +95,8 @@ function ManageItem() {
     let hasMore = true;
     while (hasMore) {
       const itemResponse = await axios.get(
-        `https://os-management.onrender.com/api/items?page=${currentPage}&limit=10`
+        `https://os-management.onrender.com
+/api/items?page=${currentPage}&limit=10`
       );
       const items = itemResponse.data.items;
       allItems = [...allItems, ...items];
@@ -158,7 +160,8 @@ function ManageItem() {
   const loadItems = async (page = 1) => {
     try {
       const { data } = await axios.get(
-        `https://os-management.onrender.com/api/items?page=${page}&limit=${itemsPerPage}`
+        `https://os-management.onrender.com
+/api/items?page=${page}&limit=${itemsPerPage}`
       );
       setItems(data.items);
       setFilteredItems(data.items);
@@ -197,7 +200,8 @@ function ManageItem() {
   const handleDelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com/api/items/${itemId}`
+        `https://os-management.onrender.com
+/api/items/${itemId}`
       );
       if (data?.error) {
         toast.error(data.error);
@@ -210,10 +214,10 @@ function ManageItem() {
     }
   };
 
-  // const handleShowStock = (item) => {
-  //   setSelectedItem(item);
-  //   setShowStock(true);
-  // };
+  const handleShowStock = (item) => {
+    setSelectedItem(item);
+    setShowStock(true);
+  };
   
 
   const handleShowItemPrice = (item) => {
@@ -262,7 +266,8 @@ function ManageItem() {
   const loadItemstock = async (itemsToLoad) => {
     try {
       const itemStockRequests = itemsToLoad.map((item) =>
-        axios.get(`https://os-management.onrender.com/api/itemprices?item=${item.item}`)
+        axios.get(`https://os-management.onrender.com
+/api/itemprices?item=${item.item}`)
       );       
       const responses = await Promise.all(itemStockRequests);
       const stockMap = {};    
@@ -397,12 +402,12 @@ function ManageItem() {
                           </button>
                         </Tooltip>
                         <Tooltip title="View Utilization">
-                          {/* <button
+                          <button
                             className="btns1"
                             onClick={() => handleShowStock(item)}
                           >
                             <BiInfoCircle className="icon-size"/>
-                          </button> */}
+                          </button>
                         </Tooltip>
                         <Tooltip title="Delete">
                           <button
@@ -441,7 +446,7 @@ function ManageItem() {
           }}
         />
       </Modal>
-      {/* <Modal
+      <Modal
         visible={showStock}
         onCancel={() => setShowStock(false)}
         footer={null}
@@ -451,7 +456,7 @@ function ManageItem() {
           item={selectedItem}
           onClose={() => setShowStock(false)}
         />
-      </Modal> */}
+      </Modal>
       <Modal
         visible={showItem}
         onCancel={() => setShowItem(false)}

@@ -66,7 +66,8 @@ function Dashboard() {
       let totalPages = 1;
       do {
         const { data } = await axios.get(
-          `https://os-management.onrender.com/api/customerpos?page=${currentPage}&limit=6`
+          `https://os-management.onrender.com
+/api/customerpos?page=${currentPage}&limit=6`
         );
         allCPOs = [...allCPOs, ...data.customers];
         totalPages = data.totalPages;
@@ -141,7 +142,8 @@ function Dashboard() {
         const associatedID = selectedPurchase._id;
         setSelectedPO(selectedPO);
         const itemResponse = await axios.get(
-          `https://os-management.onrender.com/api/itemppos?purchaseOrderId=${associatedID}`
+          `https://os-management.onrender.com
+/api/itemppos?purchaseOrderId=${associatedID}`
         );
         const filteredItems = itemResponse.data.filter(
           (item) => item.purchaseOrderId === associatedID
@@ -334,6 +336,7 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 
 

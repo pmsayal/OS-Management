@@ -164,7 +164,7 @@ function ManageCustomer() {
                   <td>{customer.name}</td>
                   <td>{customer.email}</td>
                   <td>{customer.phone}</td>
-                  <td>{customer.area}</td>
+                  <td>{customer.area} -{customer.city}</td>
                   <td>{customer.status}</td>
                   <td>
                     <div className="button-group">

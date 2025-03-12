@@ -36,7 +36,8 @@ const AddItem = ({ editingItem, setVisible, loadItems, setEditingItem }) => {
         console.log("Fetched suppliers:", data);
 
         if (Array.isArray(data)) {
-          setSuppliers(data);
+          const activeSuppliers = data.filter(supplier => supplier.status === "Active");
+          setSuppliers(activeSuppliers);
         } else {
           console.error("Unexpected response format:", data);
         }
@@ -66,7 +67,8 @@ const AddItem = ({ editingItem, setVisible, loadItems, setEditingItem }) => {
       let res;
       if (editingItem && editingItem._id) {
         res = await axios.put(
-          `https://os-management.onrender.com/api/items/${editingItem._id}`,
+          `https://os-management.onrender.com
+/api/items/${editingItem._id}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -197,15 +199,15 @@ const AddItem = ({ editingItem, setVisible, loadItems, setEditingItem }) => {
           <input
             type="checkbox"
             name="status"
-            checked={formData.status === "active"}
+            checked={formData.status === "Active"}
             onChange={(e) =>
               setFormData({
                 ...formData,
-                status: e.target.checked ? "active" : "inactive",
+                status: e.target.checked ? "Active" : "Inactive",
               })
             }
             className="customer-form__input"
-            required
+            // required
           />
         </div>
 

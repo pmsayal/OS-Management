@@ -19,7 +19,9 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadC
       try {
         const { data } = await axios.get("https://os-management.onrender.com/api/items");
         if (Array.isArray(data.items)) {
-          setItems(data.items);
+          // setItems(data.items);
+          const activeItems = data.items.filter(item => item.status === "Active");
+          setItems(activeItems);
         } else {
           setItems([]);
         }
@@ -125,37 +127,6 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadC
     }
   };
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("item", item);
-  //     formData.append("qty", qty);
-  //     formData.append("cost", cost);
-  //     formData.append("tax", tax);
-  //     formData.append("salesPrice", salesPrice);
-  //     formData.append("customerPo", itemToEdit.customerPo);
-
-  //     const response = await axios.put(
-  //       `https://os-management.onrender.com/api/itempos/${itemToEdit._id}`,
-  //       formData,
-  //       {
-  //         headers: { "Content-Type": "application/json" },
-  //       }
-  //     );
-  
-  //     if (response.status === 200) {
-  //       toast.success(response.data.message || "Item updated successfully!");
-  //       refreshData();
-  //       await loadCPO(currentPage);
-  //       closeAddForm();
-  //     } else {
-  //       toast.error(response.data.error || "Unexpected error occurred.");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error:", err.message);
-  //     toast.error("ERROR: Failed to update item due to server error.");
-  //   }
-  // };
 
   const handleUpdate = async () => {
     try {
