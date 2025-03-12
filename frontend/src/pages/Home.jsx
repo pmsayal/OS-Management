@@ -365,7 +365,7 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({ email: "", password: "" }); // Reset errors before validating
+    setErrors({ email: "", password: "" }); 
 
     try {
       const { data } = await axios.post("https://os-management.onrender.com/api/login", {
@@ -406,7 +406,7 @@ const Home = () => {
           <form id="loginForm" className="login-form" onSubmit={handleSubmit}>
             <div className="login-header">
               {/* <h1 className="WB">Welcome Back</h1> */}
-              <p className="WB">Welcome Back</p>
+              <p className="WB">Order Management </p>
               <p className="signupline">Please sign in</p>
             </div>
 
