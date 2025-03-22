@@ -331,6 +331,7 @@
 // export default Home;
 
 
+ 
 
 
 import React, { useState, useEffect } from "react";
@@ -347,6 +348,7 @@ const Home = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -365,7 +367,8 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({ email: "", password: "" }); 
+    setErrors({ email: "", password: "" });
+    setLoading(true); // Start loading
 
     try {
       const { data } = await axios.post("https://os-management.onrender.com/api/login", {
@@ -384,8 +387,8 @@ const Home = () => {
       if (err.response && err.response.data && err.response.data.error) {
         const errorMsg = err.response.data.error;
 
-        if (errorMsg === "User not found") {
-          setErrors((prev) => ({ ...prev, email: "User not found, please check your email" }));
+        if (errorMsg === "User  not found") {
+          setErrors((prev) => ({ ...prev, email: "User  not found, please check your email" }));
         } else if (errorMsg === "Incorrect password") {
           setErrors((prev) => ({ ...prev, password: "Incorrect password, please try again" }));
         } else {
@@ -394,6 +397,8 @@ const Home = () => {
       } else {
         toast.error("Login failed. Try again.");
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -405,11 +410,9 @@ const Home = () => {
         <div className="login-card">
           <form id="loginForm" className="login-form" onSubmit={handleSubmit}>
             <div className="login-header">
-              {/* <h1 className="WB">Welcome Back</h1> */}
               <p className="WB">Order Management </p>
               <p className="signupline">Please sign in</p>
             </div>
-
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -426,7 +429,6 @@ const Home = () => {
               />
               {errors.email && <div className="error active">{errors.email}</div>}
             </div>
-
 
             <div className="form-group">
               <label htmlFor="password">Password</label>
@@ -460,8 +462,8 @@ const Home = () => {
               </label>
             </div>
 
-            <button type="submit" className="login-button">
-              Login
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? "Logging in..." : "Login"} {/* Show loading text */}
             </button>
 
             <div className="additional-options">
@@ -474,6 +476,12 @@ const Home = () => {
               </a>
             </div>
           </form>
+
+          {loading && (
+        <div className="processing-modal">
+          <img className="ProcessingIMG" src="./ProcessingGig.gif" alt="Processing" />
+        </div>
+      )}
         </div>
       )}
     </div>

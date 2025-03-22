@@ -712,7 +712,7 @@ const AddOrEditPItem = ({ customerId, editpo, setShowAddOrEdit, availableQty, pu
         toast.error(data.error);
       } else {
         toast.success(
-          `${data.item || "Item"} details ${editpo ? "updated" : "added"} successfully`
+          `${data.item || "Purchase Item"} details ${editpo ? "updated" : "added"} successfully`
         );
         setShowAddOrEdit(false);
         onSuccess();

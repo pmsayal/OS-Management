@@ -160,8 +160,7 @@ function ManageItem() {
   const loadItems = async (page = 1) => {
     try {
       const { data } = await axios.get(
-        `https://os-management.onrender.com
-/api/items?page=${page}&limit=${itemsPerPage}`
+        `https://os-management.onrender.com/api/items?page=${page}&limit=${itemsPerPage}`
       );
       setItems(data.items);
       setFilteredItems(data.items);
@@ -200,8 +199,7 @@ function ManageItem() {
   const handleDelete = async (itemId) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com
-/api/items/${itemId}`
+        `https://os-management.onrender.com/api/items/${itemId}`
       );
       if (data?.error) {
         toast.error(data.error);
@@ -266,8 +264,7 @@ function ManageItem() {
   const loadItemstock = async (itemsToLoad) => {
     try {
       const itemStockRequests = itemsToLoad.map((item) =>
-        axios.get(`https://os-management.onrender.com
-/api/itemprices?item=${item.item}`)
+        axios.get(`https://os-management.onrender.com/api/itemprices?item=${item.item}`)
       );       
       const responses = await Promise.all(itemStockRequests);
       const stockMap = {};    

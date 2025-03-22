@@ -20,6 +20,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadC
         const { data } = await axios.get("https://os-management.onrender.com/api/items");
         if (Array.isArray(data.items)) {
           // setItems(data.items);
+          console.log("Item:", data)
           const activeItems = data.items.filter(item => item.status === "Active");
           setItems(activeItems);
         } else {
@@ -97,6 +98,8 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadC
     }
   }, [itemToEdit, items]);
 
+
+
   const handleSave = async () => {
     try {
       const formData = new FormData();
@@ -115,7 +118,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadC
         }
       );  
       if (response.status === 201) {
-        toast.success(response.data.message || "Item added successfully!");
+        toast.success(response.data.message || "Sales Item added successfully!");
         refreshData();
         closeAddForm();
       } else {
@@ -147,7 +150,7 @@ const AddEditPo = ({ refreshData, currentCpoId, closeAddForm, itemToEdit,  loadC
         );
 
         if (response.status === 200) {
-            toast.success(response.data.message || "Item updated successfully!");
+            toast.success(response.data.message || "Sales Item updated successfully!");
             refreshData(); 
             await loadCPO(currentPage); 
             closeAddForm();

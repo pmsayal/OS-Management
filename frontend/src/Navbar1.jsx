@@ -7,7 +7,7 @@ import { FaUser } from "react-icons/fa";
 
 function Navbar1() {
   const [auth] = useAuth();
-  console.log("user deatails", auth)
+  // console.log("user deatails", auth)
   return (
     <div className="navbar">
       <div>

@@ -21,6 +21,7 @@
 //   const [pageSize] = useState(10);
 //   const [cpoList, setCpoList] = useState([]);
 //   const [selectedCpoId, setSelectedCpoId] = useState();
+//   const [filteredCPOs, setFilteredCPOs] = useState([]); // New state for filtered CPOs
 
 //   useEffect(() => {
 //     loadCpo(currentPage);
@@ -31,15 +32,11 @@
 //   const loadCpoList = async () => {
 //     try {
 //       const { data } = await axios.get("https://os-management.onrender.com/api/customerpos");
-//       console.log("CPO:",data)
+//       console.log("CPO:", data);
 //     } catch (err) {
 //       console.error("Error loading customers:", err);
 //     }
 //   };
-
-//   // const filteredCPO = customern
-//   // ? customerpo.filter((item) => item.customern?._id === customern)
-//   // : customerpo;
 
 //   const loadCpo = async (page) => {
 //     try {
@@ -52,7 +49,7 @@
 //       const uniqueCustomers = Array.from(
 //         new Set(data.customers.map((item) => JSON.stringify(item.customern)))
 //       ).map((cust) => JSON.parse(cust));
-//       console.log("CPO Customers:", uniqueCustomers)
+//       console.log("CPO Customers:", uniqueCustomers);
 
 //       setCustomer(uniqueCustomers);
 //     } catch (err) {
@@ -100,6 +97,29 @@
 //     setCurrentPage(page);
 //   };
 
+//   // Filtered CPO based on selected customer
+//   const filteredCPO = customern
+//     ? customerpo.filter((item) => item.customern?._id === customern)
+//     : customerpo;
+
+//   // Update filtered CPOs for dropdown based on selected customer
+//   useEffect(() => {
+//     if (customern) {
+//       const cposForSelectedCustomer = customerpo.filter(
+//         (item) => item.customern?._id === customern
+//       );
+//       setFilteredCPOs(cposForSelectedCustomer);
+//       setSelectedCpoId(null); // Reset selected CPO when customer changes
+//     } else {
+//       setFilteredCPOs([]);
+//     }
+//   }, [customern, customerpo]);
+
+//   // Filtered CPO based on selected CPO from dropdown
+//   const displayedCPO = selectedCpoId
+//     ? filteredCPOs.filter((item) => item._id === selectedCpoId)
+//     : filteredCPO;
+
 //   return (
 //     <>
 //       <div className="main-container">
@@ -109,9 +129,9 @@
 //             <div className="Dropdown-item">
 //               <Select
 //                 name="customern"
-//                 value={customer.find((c) => c._id === customern) || null}
+//                 value={customer.find((c) => c._id === customern) || null} // This ensures the selected customer is displayed
 //                 onChange={(selectedOption) => {
-//                   setCustomern(selectedOption?.value || "")
+//                   setCustomern(selectedOption?.value || "");
 //                 }}
 //                 className="SearchbelDropdown"
 //                 placeholder="Select Customer"
@@ -137,10 +157,11 @@
 //                   setCurrentCpoId(selectedOption.value);
 //                   handleCpoSelect(selectedOption.value);
 //                 }}
-//                 options={cpoList.map((cpo) => ({
-//                   value: cpo,
-//                   label: cpo,
+//                 options={filteredCPOs.map((cpo) => ({
+//                   value: cpo._id,
+//                   label: cpo.customerpo,
 //                 }))}
+//                 isDisabled={!customern} // Disable if no customer is selected
 //               />
 //             </div>
 //             <div>
@@ -180,7 +201,7 @@
 //               </tr>
 //             </thead>
 //             <tbody>
-//               {customerpo.map((item) => {
+//               {displayedCPO.map((item) => {
 //                 const relatedSalesItems = salesItems.filter(
 //                   (salesItem) => salesItem.customerPo === item._id
 //                 );
@@ -255,6 +276,7 @@
 
 // export default ManageCPO;
 
+
 import React, { useState, useEffect } from "react";
 import SalesOrder from "../Customer-Order/CustomerPo";
 import { BiAddToQueue, BiEdit, BiSearch, BiTrash } from "react-icons/bi";
@@ -279,6 +301,7 @@ function ManageCPO() {
   const [cpoList, setCpoList] = useState([]);
   const [selectedCpoId, setSelectedCpoId] = useState();
   const [filteredCPOs, setFilteredCPOs] = useState([]); // New state for filtered CPOs
+  const [filteredByDateCPOs, setFilteredByDateCPOs] = useState([]); // New state for filtered CPOs by date
 
   useEffect(() => {
     loadCpo(currentPage);
@@ -377,6 +400,11 @@ function ManageCPO() {
     ? filteredCPOs.filter((item) => item._id === selectedCpoId)
     : filteredCPO;
 
+  // Filter displayed CPOs based on selected order date
+  const filteredByDateCPO = orderDate
+    ? displayedCPO.filter((item) => new Date(item.date).toISOString().split('T')[0] === orderDate)
+    : displayedCPO;
+
   return (
     <>
       <div className="main-container">
@@ -458,7 +486,7 @@ function ManageCPO() {
               </tr>
             </thead>
             <tbody>
-              {displayedCPO.map((item) => {
+              {filteredByDateCPO.map((item) => {
                 const relatedSalesItems = salesItems.filter(
                   (salesItem) => salesItem.customerPo === item._id
                 );

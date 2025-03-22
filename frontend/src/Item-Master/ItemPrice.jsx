@@ -118,8 +118,7 @@ function ItemPrice({ setShowItem, item: selectedItem, onUpdateStock }) {
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(
-        `https://os-management.onrender.com
-/api/itemprices/${id}`
+        `https://os-management.onrender.com/api/itemprices/${id}`
       );
 
       if (data?.error) {
